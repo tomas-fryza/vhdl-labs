@@ -115,7 +115,7 @@
    >     'Z',  -- High impedance. 3-state buffer outputs
    >     'W',  -- Weak unknown. Bus terminators
    >     'L',  -- Weak zero. Pull down resistors
-   >     'H',  -- Weak one. Pulll up resistors
+   >     'H',  -- Weak one. Pull up resistors
    >     '-'   -- Don't care state used for synthesis and advanced modeling
    > );
    > ```
