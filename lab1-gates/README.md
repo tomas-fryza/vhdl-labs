@@ -16,11 +16,11 @@
 * [Challenges](#challenges)
 * [References](#references)
 
-### Learning ojectives
+### Learning objectives
 
 * Describe the main parts of a VHDL file
 * Use Vivado development tool
-* Be able to create a simulation testbenche and run the simulation
+* Be able to create a simulation testbench and run the simulation
 * Use De Morgan's and Distributive laws
 
 <a name="preparation"></a>
@@ -115,14 +115,14 @@
    >     'Z',  -- High impedance. 3-state buffer outputs
    >     'W',  -- Weak unknown. Bus terminators
    >     'L',  -- Weak zero. Pull down resistors
-   >     'H',  -- Weak one. Pulll up resistors
+   >     'H',  -- Weak one. Pull up resistors
    >     '-'   -- Don't care state used for synthesis and advanced modeling
    > );
    > ```
 
 3. Take a look at the basic parts of the VHDL source code, such as [entity](https://github.com/tomas-fryza/vhdl-course/wiki/Entity), [architecture](https://github.com/tomas-fryza/vhdl-course/wiki/Architecture), and testbench.
 
-   The usefull VHDL operators are shown in the table.
+   The useful VHDL operators are shown in the table.
 
    | **Operator** | **Description** |
    | :-: | :-- |
