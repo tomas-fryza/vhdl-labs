@@ -1,7 +1,7 @@
 -------------------------------------------------
 --! @brief 2-bit binary comparator.
 --! @version 1.1
---! @copyright (c) 2020-2024 Tomas Fryza, MIT license
+--! @copyright (c) 2020-2025 Tomas Fryza, MIT license
 --!
 --! A digital or **binary comparator** compares digital
 --! signals A, B and produce outputs depending upon the

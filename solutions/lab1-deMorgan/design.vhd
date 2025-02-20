@@ -1,7 +1,7 @@
 -------------------------------------------------
 --! @brief Example to demonstrate De Morgan's Laws.
 --! @version 1.3
---! @copyright (c) 2019-2024 Tomas Fryza, MIT license
+--! @copyright (c) 2019-2025 Tomas Fryza, MIT license
 --!
 --! This example implements the original logic function
 --! and its modified versions using De Morgan's Laws.

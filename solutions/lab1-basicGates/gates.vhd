@@ -1,7 +1,7 @@
 -------------------------------------------------
 --! @brief VHDL example for basic logic gates.
 --! @version 1.1
---! @copyright (c) 2019-2024 Tomas Fryza, MIT license
+--! @copyright (c) 2019-2025 Tomas Fryza, MIT license
 --!
 --! The entity 'gates' defines an interface for implementing
 --! 2-input AND, OR, and XOR gates. The architecture

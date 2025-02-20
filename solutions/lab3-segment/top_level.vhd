@@ -1,7 +1,7 @@
 -------------------------------------------------
 --! @brief Top level of 7-segment display decoder
 --! @version 1.3
---! @copyright (c) 2020-2024 Tomas Fryza, MIT license
+--! @copyright (c) 2020-2025 Tomas Fryza, MIT license
 --!
 --! This VHDL file implements the top-level module for
 --! a binary-to-seven-segment decoder, controlling two displays.

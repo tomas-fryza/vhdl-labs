@@ -69,7 +69,7 @@ The K-map for the "equals" function is as follows:
 
    1. Project name: `comparator`
    2. Project location: your working folder, such as `Documents`
-   3. Project type: **RTL Project**
+   3. Project type: **RTL Project** (Note, the Register-Transfer Level refers to a level of abstraction used to describe how the data is transferred and processed inside hardware.)
    4. Create a new VHDL source file: `compare_2bit`
    5. Do not add any constraints now
    6. Choose a default board: `Nexys A7-50T`
@@ -81,17 +81,17 @@ The K-map for the "equals" function is as follows:
       * `b_a_equal`, `out`
       * `a_greater`, `out`
 
-      > **Note:** The [entity](https://github.com/tomas-fryza/vhdl-course/wiki/Entity) for a 2-bit binary comparator in `compare_2bit.vhd` therefore coresponds to the following table.
+      > **Note:** The [entity](https://github.com/tomas-fryza/vhdl-labs/wiki/Entity) for a 2-bit binary comparator in `compare_2bit.vhd` therefore corresponds to the following table.
       >
       > | **Port name** | **Direction** | **Type** | **Description** |
       > | :-: | :-: | :-- | :-- |
-      > | `b`       | input  | [`std_logic_vector(1 downto 0)`](https://github.com/tomas-fryza/vhdl-course/wiki/Data-types) | Input bus b[1:0] |
+      > | `b`       | input  | [`std_logic_vector(1 downto 0)`](https://github.com/tomas-fryza/vhdl-labs/wiki/Data-types) | Input bus b[1:0] |
       > | `a`       | input  | `std_logic_vector(1 downto 0)` | Input bus a[1:0] |
       > | `b_greater` | output | `std_logic` | Output is `1` if b > a |
       > | `b_a_equal` | output | `std_logic` | Output is `1` if b = a |
       > | `a_greater` | output | `std_logic` | Output is `1` if b < a |
 
-2. In VHDL, define an [architecture](https://github.com/tomas-fryza/vhdl-course/wiki/Architecture) for a 2-bit binary comparator. The combination logic can be written using low-level operators (`and`, `or`, etc.) as assignment statements using SoP or PoS logic. However, it is more efficient to use a higher notation with [conditional signal assignments](https://github.com/tomas-fryza/vhdl-course/wiki/Signal-assignments).
+2. In VHDL, define an [architecture](https://github.com/tomas-fryza/vhdl-labs/wiki/Architecture) for a 2-bit binary comparator. The combination logic can be written using low-level operators (`and`, `or`, etc.) as assignment statements using SoP or PoS logic. However, it is more efficient to use a higher notation with [conditional signal assignments](https://github.com/tomas-fryza/vhdl-labs/wiki/Signal-assignments).
 
    ```vhdl
    -------------------------------------------------
@@ -112,9 +112,9 @@ The K-map for the "equals" function is as follows:
    end architecture behavioral;
    ```
 
-   One function is provided, but you must complete the other two: write one as a VHDL assignment statement using SoP or Pos logic, and the second as a conditional signal assignment.
+   One function is provided, but you must complete the other two: write one as a VHDL assignment statement using SoP or PoS logic, and the second as a conditional signal assignment.
 
-3. Use **File > Add Sources... Alt+A > Add or create simulation sources** and create a new VHDL file `tb_compare_2bit` (same filename as tested entity with prefix `tb_`). Generate the testbench file by [online generator](https://vhdl.lapinoo.net/testbench/) or copy/paste it from the [EDA Playground template](https://www.edaplayground.com/x/5uu3). Complete the stimuli process by several test cases.
+3. Use **File > Add Sources... Alt+A > Add or create simulation sources** and create a new VHDL file `compare_2bit_tb` (same filename as tested entity with sufix or prefix `_tb`). Generate the testbench file by [online generator](https://vhdl.lapinoo.net/testbench/) or copy/paste it from the [EDA Playground template](https://www.edaplayground.com/x/5uu3). Complete the stimuli process by several test cases.
 
    ```vhdl
    stimuli : process
@@ -195,21 +195,21 @@ The message is displayed to the console when the condition is NOT met, therefore
 
 *A constraint is a rule that dictates a placement or timing restriction for the implementation. Constraints are not VHDL, and the syntax of constraints files differ between FPGA vendors.*
 
-*__Physical constraints__ limit the placement of a signal or instance within the FPGA. The most common physical constraints are pin assignments. They tell the PAR tool to which physical FPGA pins the top-level entity signals shall be mapped.*
+*__Physical constraints__ limit the placement of a signal or instance within the FPGA. The most common physical constraints are pin assignments. They tell the P&R (Place & Route) tool to which physical FPGA pins the top-level entity signals shall be mapped.*
 
-*__Timing constraints__ set boundaries for the propagation time from one logic element to another. The most common timing constraint is the clock constraint. We need to specify the clock frequency so that the PAR tool knows how much time it has to work with between clock edges.*
+*__Timing constraints__ set boundaries for the propagation time from one logic element to another. The most common timing constraint is the clock constraint. We need to specify the clock frequency so that the P&R tool knows how much time it has to work with between clock edges.*
 
 The Nexys A7 board provides sixteen switches and LEDs. The switches can be used to provide inputs, and the LEDs can be used as output devices.
 
-1. See [schematic](https://github.com/tomas-fryza/vhdl-course/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out the connection of slide switches, LEDs, and RGB LEDs.
+1. See [schematic](https://github.com/tomas-fryza/vhdl-labs/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out the connection of slide switches, LEDs, and RGB LEDs.
 
    ![nexys A7 switches and leds](images/nexys-a7_leds-display.png)
 
-2. The Nexys A7 board have hardwired connections between FPGA chip and the switches and LEDs. To use these devices it is necessary to include in your project the correct pin assignments:
+2. The Nexys A7 board have hardwired connections between FPGA chip and the switches and LEDs. To use these devices, it is necessary to include in your project the correct pin assignments:
 
    1. Create a new constraints source `nexys-a7-50t` (XDC file).
    2. Copy/paste default constraints from [Nexys-A7-50T-Master.xdc](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) to `nexys-a7-50t.xdc` file.
-   3. The pin assignments in the file are useful only if the pin names that appear in this file are exactly the same as the port names used in your VHDL entity. Uncomment any 2 switches for inputs `a[0]`, `a[1]`, other 2 switches for `b[0]`, `b[1]`, and 3 LEDs for logic functions `b_greater`, `b_a_equal`, and `a_greater`. Part of XDC file can be as follows:
+   3. The pin assignments in the file are useful only if the pin names that appear in this file are the same as the port names used in your VHDL entity. Uncomment any 2 switches for inputs `a[0]`, `a[1]`, other 2 switches for `b[0]`, `b[1]`, and 3 LEDs for logic functions `b_greater`, `b_a_equal`, and `a_greater`. Part of XDC file can be as follows:
 
       ```xdc
       ## Switches

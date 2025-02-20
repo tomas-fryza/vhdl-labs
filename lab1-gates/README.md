@@ -50,7 +50,7 @@
 
    1. Project name: `BasicGates`
    2. Project location: your working folder, such as `Documents`
-   3. Project type: **RTL Project**
+   3. Project type: **RTL Project** (Note, the Register-Transfer Level refers to a level of abstraction used to describe how the data is transferred and processed inside hardware.)
    4. Create a new VHDL source file: `gates`
    5. Do not add any constraints now
    6. Choose a default board: `Nexys A7-50T` (will be used later in the lab)
@@ -120,7 +120,7 @@
    > );
    > ```
 
-3. Take a look at the basic parts of the VHDL source code, such as [entity](https://github.com/tomas-fryza/vhdl-course/wiki/Entity), [architecture](https://github.com/tomas-fryza/vhdl-course/wiki/Architecture), and testbench.
+3. Take a look at the basic parts of the VHDL source code, such as [entity](https://github.com/tomas-fryza/vhdl-labs/wiki/Entity), [architecture](https://github.com/tomas-fryza/vhdl-labs/wiki/Architecture), and testbench.
 
    The useful VHDL operators are shown in the table.
 
@@ -140,9 +140,9 @@
 
    ![testench idea](images/testbench.png)
 
-   Navigate to **File > Add Sources... Alt+A > Add or create simulation sources** and proceed to create a new VHDL file named `tb_gates` (ensuring it has the same filename as the tested entity but prefixed with `tb_`). This time, click **OK** to define an empty module. Subsequently, locate the newly created simulation file under **Simulation Sources > sim_1**.
+   Navigate to **File > Add Sources... Alt+A > Add or create simulation sources** and proceed to create a new VHDL file named `gates_tb` (ensuring it has the same filename as the tested entity but sufixed or prefixed with `_tb`). This time, click **OK** to define an empty module. Subsequently, locate the newly created simulation file under **Simulation Sources > sim_1**.
 
-   Generate the testbench file using the [online generator](https://vhdl.lapinoo.net/testbench/), then copy and paste its contents into your `tb_gates.vhd` file. Afterwards, fill in the test cases within the `stimuli` process.
+   Generate the testbench file using the [online generator](https://vhdl.lapinoo.net/testbench/), then copy and paste its contents into your `gates_tb.vhd` file. Afterwards, fill in the test cases within the `stimuli` process.
 
    ```vhdl
        ...
@@ -218,7 +218,7 @@ De Morgan's laws are two fundamental rules in Boolean algebra that are used to s
    * `f_and`, `out`
    * `f_or`, `out`
 
-   Get inspired by [Example of basic gates](https://www.edaplayground.com/x/5L92) from EDA Playground, complete the `architecture`, add new simulation source file `tb_demorgan.vhd`, and verify all three functions in Vivado simulator.
+   Get inspired by [Example of basic gates](https://www.edaplayground.com/x/5L92) from EDA Playground, complete the `architecture`, add new simulation source file `demorgan_tb.vhd`, and verify all three functions in Vivado simulator.
 
 3. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
@@ -255,8 +255,8 @@ De Morgan's laws are two fundamental rules in Boolean algebra that are used to s
 
    TerosHDL is an open-source tool designed to streamline FPGA development by providing a unified workflow for simulation and synthesis using VHDL. GHDL is a free and open-source VHDL simulator that is a popular choice for hobbyists and students. It is a good option for learning VHDL and for simulating small-scale designs.
 
-   * Try to [install TerosHDL](https://github.com/tomas-fryza/vhdl-course/wiki/How-to-install-TerosHDL-on-Windows-and-Linux) on Windows or Linux
-   * Try to [install ghdl](https://github.com/tomas-fryza/vhdl-course/wiki/How-to-install-ghdl-on-Windows-and-Linux) on Windows or Linux
+   * Try to [install TerosHDL](https://github.com/tomas-fryza/vhdl-labs/wiki/How-to-install-TerosHDL-on-Windows-and-Linux) on Windows or Linux
+   * Try to [install ghdl](https://github.com/tomas-fryza/vhdl-labs/wiki/How-to-install-ghdl-on-Windows-and-Linux) on Windows or Linux
 
 <a name="references"></a>
 
