@@ -61,7 +61,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
 
    1. Project name: `display`
    2. Project location: your working folder, such as `Documents`
-   3. Project type: **RTL Project**
+   3. Project type: **RTL Project** (Note, the Register-Transfer Level refers to a level of abstraction used to describe how the data is transferred and processed inside hardware.)
    4. Create a new VHDL source file: `bin2seg`
    5. Do not add any constraints now
    6. Choose a default board: `Nexys A7-50T`
