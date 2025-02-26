@@ -19,7 +19,7 @@
 
 The Nexys A7 board provides two four-digit common anode seven-segment LED displays (configured to behave like a single eight-digit display).
 
-1. See [schematic](https://github.com/tomas-fryza/vhdl-labs/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out the connection of 7-segment displays and push-buttons. What is the difference between NPN and PNP type of BJT (Bipolar Junction Transistor).
+1. See [schematic](https://github.com/tomas-fryza/vhdl-course/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out the connection of 7-segment displays and push-buttons. What is the difference between NPN and PNP type of BJT (Bipolar Junction Transistor).
 
    ![nexys A7 led and segment](../lab2-logic/images/nexys-a7_leds-display.png)
 
@@ -61,7 +61,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
 
    1. Project name: `display`
    2. Project location: your working folder, such as `Documents`
-   3. Project type: **RTL Project** (Note, the Register-Transfer Level refers to a level of abstraction used to describe how the data is transferred and processed inside hardware.)
+   3. Project type: **RTL Project**
    4. Create a new VHDL source file: `bin2seg`
    5. Do not add any constraints now
    6. Choose a default board: `Nexys A7-50T`
@@ -77,7 +77,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
       | `bin` | input   | `std_logic_vector(3 downto 0)` | Binary representation of one hexadecimal symbol |
       | `seg` | output  | `std_logic_vector(6 downto 0)` | Seven active-low segments from A to G |
 
-2. Use [combinational process](https://github.com/tomas-fryza/vhdl-labs/wiki/Processes) and complete an architecture of the decoder.
+2. Use [combinational process](https://github.com/tomas-fryza/vhdl-course/wiki/Processes) and complete an architecture of the decoder.
 
    The process statement is very similar to the classical programming language. The code inside the process statement is executed sequentially. The process statement is declared in the concurrent section of the architecture, so two different processes are executed concurrently.
 
@@ -89,7 +89,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
    end process process_label;
    ```
 
-   In the process sensitivity list are declared all the signal which the process is sensitive to. In the following example, the process is evaluated any time a transaction is scheduled on the signal `bin` or `clear`. Inside a process, `case`-`when` [assignments](https://github.com/tomas-fryza/vhdl-labs/wiki/Signal-assignments) can be used.
+   In the process sensitivity list are declared all the signal which the process is sensitive to. In the following example, the process is evaluated any time a transaction is scheduled on the signal `bin` or `clear`. Inside a process, `case`-`when` [assignments](https://github.com/tomas-fryza/vhdl-course/wiki/Signal-assignments) can be used.
 
    ```vhdl
    -- This combinational process decodes binary input (`bin`) into 7-segment display output
@@ -104,7 +104,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
      else
 
        case bin is
-         when x"0" =>     -- x"0" means "0000" in hexadec.
+         when x"0" =>     -- x"0" means "0000" in hexadecimal
            seg <= "0000001";
          when x"1" =>
            seg <= "1001111";
@@ -130,7 +130,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
    end process p_7seg_decoder;
    ```
 
-3. Create a VHDL simulation source `bin2seg_tb`, copy/paste the [testbench template](https://www.edaplayground.com/x/Vdpu) or [generate it](https://vhdl.lapinoo.net/testbench/), complete all test cases, and verify the functionality of your decoder.
+3. Create a VHDL simulation source `tb_bin2seg`, copy/paste the [testbench template](https://www.edaplayground.com/x/Vdpu) or [generate it](https://vhdl.lapinoo.net/testbench/), complete all test cases, and verify the functionality of your decoder.
 
    ```vhdl
    -- Disable clear
@@ -216,7 +216,7 @@ end architecture;
 
 ## Part 3: Top level VHDL code
 
-Utilize the top-level design `top_level.vhd` to instantiate a `bin2seg` component and implement the seven-segment display decoder on the Nexys A7 board. Input for the decoder is obtained from four slide switches, and the output is directed to a single 7-segment display. LEDs display the input combinations, and a push-button serve as the reset signal.
+Utilize the top-level design `top_level.vhd` to instantiate a `bin2seg` component and implement the seven-segment display decoder on the Nexys A7 board. Input for the decoder is obtained from four slide switches, and the output is directed to a single 7-segment display. LEDs display the input combinations, and a push-button serves as the reset signal.
 
 1. Create a new VHDL design source `top_level` in your project.
 2. Define I/O ports as follows.
