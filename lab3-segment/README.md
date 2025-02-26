@@ -48,14 +48,14 @@ The Nexys A7 board provides two four-digit common anode seven-segment LED displa
 
    > Note that, there are other types of segment displays, [such as 14- or 16-segment](http://avtanski.net/projects/lcd/).
    >
-   > ![other disaplys](images/7-14-segment-display.jpg) &nbsp; &nbsp; &nbsp; &nbsp;
-   > ![other disaplys](images/16-segment-display.png)
+   > ![other displays](images/7-14-segment-display.jpg) &nbsp; &nbsp; &nbsp; &nbsp;
+   > ![other displays](images/16-segment-display.png)
 
 <a name="part1"></a>
 
 ## Part 1: VHDL code for seven-segment display decoder
 
-The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control signals which can be displayed on 7-segment display. A display consist of 7 LED segments to display the decimal digits `0` to `9` and letters `A` to `F`.
+The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control signals which can be displayed on 7-segment display. A display consists of 7 LED segments to display the decimal digits `0` to `9` and letters `A` to `F`.
 
 1. Run Vivado and create a new project:
 
@@ -89,7 +89,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
    end process process_label;
    ```
 
-   In the process sensitivity list are declared all the signal which the process is sensitive to. In the following exampe, the process is evaluated any time a transaction is scheduled on the signal `bin` or `clear`. Inside a process, `case`-`when` [assignments](https://github.com/tomas-fryza/vhdl-course/wiki/Signal-assignments) can be used.
+   In the process sensitivity list are declared all the signal which the process is sensitive to. In the following example, the process is evaluated any time a transaction is scheduled on the signal `bin` or `clear`. Inside a process, `case`-`when` [assignments](https://github.com/tomas-fryza/vhdl-course/wiki/Signal-assignments) can be used.
 
    ```vhdl
    -- This combinational process decodes binary input (`bin`) into 7-segment display output
@@ -104,7 +104,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
      else
 
        case bin is
-         when x"0" =>     -- x"0" means "0000" in hexadec.
+         when x"0" =>     -- x"0" means "0000" in hexadecimal
            seg <= "0000001";
          when x"1" =>
            seg <= "1001111";
