@@ -130,7 +130,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
    end process p_7seg_decoder;
    ```
 
-3. Create a VHDL simulation source `tb_bin2seg`, copy/paste the [testbench template](https://www.edaplayground.com/x/Vdpu) or [generate it](https://vhdl.lapinoo.net/testbench/), complete all test cases, and verify the functionality of your decoder.
+3. Create a VHDL simulation source `bin2seg_tb`, copy/paste the [testbench template](https://www.edaplayground.com/x/Vdpu) or [generate it](https://vhdl.lapinoo.net/testbench/), complete all test cases, and verify the functionality of your decoder.
 
    ```vhdl
    -- Disable clear
