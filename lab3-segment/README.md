@@ -19,7 +19,7 @@
 
 The Nexys A7 board provides two four-digit common anode seven-segment LED displays (configured to behave like a single eight-digit display).
 
-1. See [schematic](https://github.com/tomas-fryza/vhdl-course/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out the connection of 7-segment displays and push-buttons. What is the difference between NPN and PNP type of BJT (Bipolar Junction Transistor).
+1. See [schematic](https://github.com/tomas-fryza/vhdl-labs/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out the connection of 7-segment displays and push-buttons. What is the difference between NPN and PNP type of BJT (Bipolar Junction Transistor).
 
    ![nexys A7 led and segment](../lab2-logic/images/nexys-a7_leds-display.png)
 
@@ -77,7 +77,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
       | `bin` | input   | `std_logic_vector(3 downto 0)` | Binary representation of one hexadecimal symbol |
       | `seg` | output  | `std_logic_vector(6 downto 0)` | Seven active-low segments from A to G |
 
-2. Use [combinational process](https://github.com/tomas-fryza/vhdl-course/wiki/Processes) and complete an architecture of the decoder.
+2. Use [combinational process](https://github.com/tomas-fryza/vhdl-labs/wiki/Processes) and complete an architecture of the decoder.
 
    The process statement is very similar to the classical programming language. The code inside the process statement is executed sequentially. The process statement is declared in the concurrent section of the architecture, so two different processes are executed concurrently.
 
@@ -89,7 +89,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
    end process process_label;
    ```
 
-   In the process sensitivity list are declared all the signal which the process is sensitive to. In the following example, the process is evaluated any time a transaction is scheduled on the signal `bin` or `clear`. Inside a process, `case`-`when` [assignments](https://github.com/tomas-fryza/vhdl-course/wiki/Signal-assignments) can be used.
+   In the process sensitivity list are declared all the signal which the process is sensitive to. In the following example, the process is evaluated any time a transaction is scheduled on the signal `bin` or `clear`. Inside a process, `case`-`when` [assignments](https://github.com/tomas-fryza/vhdl-labs/wiki/Signal-assignments) can be used.
 
    ```vhdl
    -- This combinational process decodes binary input (`bin`) into 7-segment display output
