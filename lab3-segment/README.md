@@ -104,7 +104,7 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
      else
 
        case bin is
-         when x"0" =>     -- x"0" means "0000" in hexadec.
+         when x"0" =>     -- x"0" means "0000" in hexadecimal
            seg <= "0000001";
          when x"1" =>
            seg <= "1001111";
@@ -216,7 +216,7 @@ end architecture;
 
 ## Part 3: Top level VHDL code
 
-Utilize the top-level design `top_level.vhd` to instantiate a `bin2seg` component and implement the seven-segment display decoder on the Nexys A7 board. Input for the decoder is obtained from four slide switches, and the output is directed to a single 7-segment display. LEDs display the input combinations, and a push-button serve as the reset signal.
+Utilize the top-level design `top_level.vhd` to instantiate a `bin2seg` component and implement the seven-segment display decoder on the Nexys A7 board. Input for the decoder is obtained from four slide switches, and the output is directed to a single 7-segment display. LEDs display the input combinations, and a push-button serves as the reset signal.
 
 1. Create a new VHDL design source `top_level` in your project.
 2. Define I/O ports as follows.
