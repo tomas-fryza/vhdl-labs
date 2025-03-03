@@ -17,9 +17,9 @@ library ieee;
 
 entity alu is
     port (
-        a      : in    std_logic_vector(3 downto 0);
-        b      : in    std_logic_vector(3 downto 0); --! 4-bit inputs
-        op_sel : in    std_logic_vector(2 downto 0); --! Operation selector
+        a      : in    std_logic_vector(3 downto 0); --! 4-bit inputs
+        b      : in    std_logic_vector(3 downto 0);
+        opcode : in    std_logic_vector(2 downto 0); --! Operation selector
         result : out   std_logic_vector(3 downto 0); --! 4-bit output
         carry  : out   std_logic;                    --! Carry out flag
         zero   : out   std_logic                     --! Zero flag
@@ -32,10 +32,10 @@ architecture behavioral of alu is
     signal sig_res : std_logic_vector(4 downto 0);  -- Extra bit for carry
 begin
 
-    p_alu : process (a, b, op_sel) is
+    p_alu : process (a, b, opcode) is
     begin
 
-        case op_sel is
+        case opcode is
 
             when "000" =>
                 sig_res <= '0' & not a;                             -- NOT A
