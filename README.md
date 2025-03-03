@@ -31,7 +31,7 @@ The repository contains VHDL lab exercises for bachelor course [*Digital Electro
 1. [Introduction to VHDL and Vivado](lab1-gates)
 2. [Combinational logic circuits](lab2-logic)
 3. [Seven-segment display decoder](lab3-segment)
-4. [Arithmetic circuits](lab4-adder)
+4. [Arithmetic-logic unit (ALU)](lab4-alu)
 5. [Binary counter](lab5-counter)
 6. [LFSR counter](lab6-lfsr)
 7. [FSM debouncer](lab7-fsm)
