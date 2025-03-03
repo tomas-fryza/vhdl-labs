@@ -11,7 +11,7 @@
 
 * Understand the concatenate operator (`&`)
 * Construct a simple Arithmetic Logic Unit (ALU)
-* Understant the basic flag bits
+* Understand the basic flag bits
 * Practice instantiating VHDL sub-components
 
 <a name="preparation"></a>
@@ -94,8 +94,9 @@ An **opcode** (short for operation code) is a part of a machine language instruc
    library ieee;
    use ieee.std_logic_1164.all;
    use ieee.numeric_std.all;  -- Package for data type conversions
+   ...
 
-   architecture behavioral of alu is
+   architecture behavioral of alu_4bit is
        signal sig_res : std_logic_vector(4 downto 0);  -- Extra bit for carry
    begin
 
@@ -109,7 +110,9 @@ An **opcode** (short for operation code) is a part of a machine language instruc
                    sig_res <= std_logic_vector(unsigned('0' & a) +
                                                unsigned('0' & b));  -- ADD
 
+
                -- WRITE YOUR ALU OPERATIONS HERE
+
 
                when others =>
                    sig_res <= "00000";  -- Default case
@@ -126,10 +129,8 @@ An **opcode** (short for operation code) is a part of a machine language instruc
    ```
 
     Some **important notes**:
-
-       * The arithmetic operator `+` is defined for the `unsigned` data type in VHDL, as part of the `ieee.numeric_std` package, which allows you to perform arithmetic operations directly, such as addition, subtraction, and multiplication.
-
-       * It is highly recommended to use a VHDL formatter, such as [https://g2384.github.io/VHDLFormatter/](https://g2384.github.io/VHDLFormatter/), which helps you maintain a consistent and clean coding style.
+      * The arithmetic operator `+` is defined for the `unsigned` data type in VHDL, as part of the `ieee.numeric_std` package, which allows you to perform arithmetic operations directly, such as addition, subtraction, and multiplication.
+      * It is highly recommended to use a VHDL formatter, such as [https://g2384.github.io/VHDLFormatter/](https://g2384.github.io/VHDLFormatter/), which helps you maintain a consistent and clean coding style.
 
 4. Create a VHDL simulation source file named `alu_4bit_tb` to serve as a [testbench](https://vhdl.lapinoo.net/testbench/) for your ALU. In this testbench, generate various input combinations to test all ALU operations and verify that the outputs are correct.
 
