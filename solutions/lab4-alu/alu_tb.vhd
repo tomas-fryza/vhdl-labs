@@ -6,11 +6,11 @@ library ieee;
     use ieee.std_logic_1164.all;
     use ieee.numeric_std.all; -- Package for data type conversions
 
-entity tb_alu is
-end entity tb_alu;
+entity tb_alu_4bit is
+end entity tb_alu_4bit;
 
-architecture tb of tb_alu is
-    component alu is
+architecture tb of tb_alu_4bit is
+    component alu_4bit is
         port (
             a      : in    std_logic_vector(3 downto 0);
             b      : in    std_logic_vector(3 downto 0);
@@ -29,7 +29,7 @@ architecture tb of tb_alu is
     signal zero   : std_logic;
 begin
 
-    dut : component alu
+    dut : component alu_4bit
         port map (
             a      => a,
             b      => b,
@@ -68,7 +68,7 @@ end architecture tb;
 
 -- Configuration block below is required by some simulators. Usually no need to edit.
 
-configuration cfg_tb_alu of tb_alu is
+configuration cfg_tb_alu_4bit of tb_alu_4bit is
     for tb
     end for;
-end cfg_tb_alu;
+end cfg_tb_alu_4bit;

@@ -15,7 +15,7 @@ library ieee;
 
 -------------------------------------------------
 
-entity alu is
+entity alu_4bit is
     port (
         a      : in    std_logic_vector(3 downto 0); --! 4-bit inputs
         b      : in    std_logic_vector(3 downto 0);
@@ -24,11 +24,11 @@ entity alu is
         carry  : out   std_logic;                    --! Carry out flag
         zero   : out   std_logic                     --! Zero flag
     );
-end entity alu;
+end entity alu_4bit;
 
 -------------------------------------------------
 
-architecture behavioral of alu is
+architecture behavioral of alu_4bit is
     signal sig_res : std_logic_vector(4 downto 0);  -- Extra bit for carry
 begin
 
