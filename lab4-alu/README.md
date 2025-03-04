@@ -10,6 +10,7 @@
 ### Learning objectives
 
 * Understand the concatenate operator (`&`)
+* Use data types conversions
 * Construct a simple Arithmetic Logic Unit (ALU)
 * Understand the basic flag bits
 * Practice instantiating VHDL sub-components
@@ -129,8 +130,10 @@ An **opcode** (short for operation code) is a part of a machine language instruc
    ```
 
     Some **important notes**:
-      * The arithmetic operator `+` is defined for the `unsigned` data type in VHDL, as part of the `ieee.numeric_std` package, which allows you to perform arithmetic operations directly, such as addition, subtraction, and multiplication.
       * It is highly recommended to use a VHDL formatter, such as [https://g2384.github.io/VHDLFormatter/](https://g2384.github.io/VHDLFormatter/), which helps you maintain a consistent and clean coding style.
+      * The arithmetic operator `+` is defined for the `unsigned` data type in VHDL, as part of the `ieee.numeric_std` package, which allows you to perform arithmetic operations directly, such as addition, subtraction, and multiplication.
+      * In VHDL, different data types may need to be converted before performing arithmetic operations or other operations. Here's how to convert data types:
+        ![data types](images/Types_Conversion_Diagram.png)
 
 4. Create a VHDL simulation source file named `alu_4bit_tb` to serve as a [testbench](https://vhdl.lapinoo.net/testbench/) for your ALU. In this testbench, generate various input combinations to test all ALU operations and verify that the outputs are correct.
 
@@ -145,12 +148,12 @@ An **opcode** (short for operation code) is a part of a machine language instruc
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
-   | `SW_B` | in  | `std_logic_vector(3 downto 0)` | First operand b[3:0] |
-   | `SW_A` | in  | `std_logic_vector(3 downto 0)` | Second operand a[3:0] |
-   | `SW_OPCODE` | in  | `std_logic_vector(2 downto 0)` | Operation selector opcode[2:0] |
-   | `LED_B` | out | `std_logic_vector(3 downto 0)` | Show binary value b[3:0] |
-   | `LED_A` | out | `std_logic_vector(3 downto 0)` | Show binary value a[3:0] |
-   | `LED_OPCODE` | out | `std_logic_vector(2 downto 0)` | Show binary value opcode[3:0] |
+   | `SW_A` | in  | `std_logic_vector(3 downto 0)` | First operand |
+   | `SW_B` | in  | `std_logic_vector(3 downto 0)` | Second operand |
+   | `SW_OPCODE` | in  | `std_logic_vector(2 downto 0)` | Operation selector |
+   | `LED_A` | out | `std_logic_vector(3 downto 0)` | Show value A |
+   | `LED_B` | out | `std_logic_vector(3 downto 0)` | Show value B |
+   | `LED_RESULT` | out | `std_logic_vector(3 downto 0)` | Show result |
    | `LED_RED` | out | `std_logic` | Show output carry flag |
    | `LED_BLUE` | out | `std_logic` | Show zero flag |
    | `CA` | out | `std_logic` | Cathode of segment A |
@@ -168,18 +171,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
 
 3. Use component declaration and instantiation of `alu_4bit` and `bin2seg`, and define the top-level architecture as follows.
 
-
-
-
-
-
-
-
-
-
-
-
-   ![top level](images/top-level_structure.png)
+   ![top level](images/top-level_alu.png)
 
    ```vhdl
    architecture behavioral of top_level is
@@ -187,6 +179,9 @@ An **opcode** (short for operation code) is a part of a machine language instruc
 
 
      -- Component declaration for bin2seg
+
+
+     -- Local signal for alu result
 
 
    begin
@@ -200,7 +195,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
      -- Turn off decimal point
 
 
-     -- Display input values on LEDs
+     -- Display input and output values on LEDs
 
 
      -- Set display position
@@ -230,3 +225,5 @@ An **opcode** (short for operation code) is a part of a machine language instruc
 1. Digilent Reference. [Nexys A7 Reference Manual](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual)
 
 2. Digilent. [General .xdc file for the Nexys A7-50T](https://github.com/Digilent/digilent-xdc/blob/master/Nexys-A7-50T-Master.xdc)
+
+3. [VHDL Beautifier, Formatter](https://g2384.github.io/VHDLFormatter/)
