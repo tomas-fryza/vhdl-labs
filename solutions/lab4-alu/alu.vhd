@@ -41,28 +41,27 @@ begin
                 sig_res <= '0' & not a;                             -- NOT A
 
             when "001" =>
-                sig_res <= '0' & (a xor b);                         -- XOR
-
-            when "010" =>
                 sig_res <= std_logic_vector(unsigned('0' & a) +
                                             unsigned('0' & b));     -- ADD
 
-            when "011" =>
+            when "010" =>
                 sig_res <= std_logic_vector(unsigned('0' & a) -
                                             unsigned('0' & b));     -- SUB
 
-            -- Extended operations
-            when "100" =>
-                sig_res <= std_logic_vector(unsigned('0' & a) + 1); -- Increment A
-
-            when "101" =>
-                sig_res <= std_logic_vector(unsigned('0' & a) - 1); -- Decrement A
-
-            when "110" =>
+            when "011" =>
                 sig_res <= a(3 downto 0) & '0';                     -- Multiply by 2 (Shift Left)
 
-            when "111" =>
+            when "100" =>
                 sig_res <= "00" & a(3 downto 1);                    -- Divide by 2 (Shift Right)
+
+            when "101" =>
+                sig_res <= std_logic_vector(unsigned('0' & a) + 1); -- Increment A
+
+            when "110" =>
+                sig_res <= std_logic_vector(unsigned('0' & a) - 1); -- Decrement A
+
+            when "111" =>
+                sig_res <= '0' & (a xor b);                         -- XOR
 
             when others =>
                 sig_res <= "00000";                                 -- Default case
