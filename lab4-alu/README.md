@@ -104,19 +104,19 @@ An **opcode** (short for operation code) is a part of a machine language instruc
        p_alu : process (a, b, opcode) is
        begin
            case opcode is
-               when "000" =>
+               when "000" =>  -- NOT
                    sig_res <= '0' & not a;  -- NOT A
 
-               when "010" =>
+               when "010" =>  -- ADD
                    sig_res <= std_logic_vector(unsigned('0' & a) +
-                                               unsigned('0' & b));  -- ADD
+                                               unsigned('0' & b));
 
 
                -- WRITE YOUR ALU OPERATIONS HERE
 
 
                when others =>
-                   sig_res <= "00000";  -- Default case
+                   sig_res <= b"0_0000";  -- Default case
            end case;
        end process p_alu;
 
@@ -167,7 +167,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
    | `AN` | out | `std_logic_vector(7 downto 0)` | Common anodes of all on-board displays |
    | `BTNC` | in | `std_logic` | Clear the display |
 
-2. Copy design source file `bin2seg.vhd` from the previous lab to `YOUR-PROJECT-FOLDER/adder.srcs/sources_1/new/` folder and add it to the project.
+2. Copy design source file `bin2seg.vhd` from the previous lab to `YOUR-PROJECT-FOLDER/alu.srcs/sources_1/new/` folder and add it to the project.
 
 3. Use component declaration and instantiation of `alu_4bit` and `bin2seg`, and define the top-level architecture as follows.
 
@@ -206,7 +206,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
 
 4. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t`, uncomment and modify names of used pins according to the `top_level` entity.
 
-5. Compile the project (ie. transform the high-level VHDL code into a binary configuration file) and download the generated bitstream `YOUR-PROJECT-FOLDER/adder.runs/impl_1/top_level.bit` into the FPGA chip.
+5. Compile the project (ie. transform the high-level VHDL code into a binary configuration file) and download the generated bitstream `YOUR-PROJECT-FOLDER/alu.runs/impl_1/top_level.bit` into the FPGA chip.
 
 6. Test the functionality of the adder by toggling the switches and observing display and LEDs.
 
