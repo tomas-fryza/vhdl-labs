@@ -37,34 +37,35 @@ begin
 
         case opcode is
 
-            when "000" =>
-                sig_res <= '0' & not a;                             -- NOT A
+            when "000" =>  -- NOT A
+                sig_res <= '0' & not a;
 
-            when "001" =>
-                sig_res <= std_logic_vector(unsigned('0' & a) +
-                                            unsigned('0' & b));     -- ADD
+            when "001" =>  -- ADD
+                sig_res <= std_logic_vector(
+                    unsigned('0' & a) +
+                    unsigned('0' & b));
 
-            when "010" =>
-                sig_res <= std_logic_vector(unsigned('0' & a) -
-                                            unsigned('0' & b));     -- SUB
+            when "010" =>  -- SUB
+                sig_res <= std_logic_vector(
+                    unsigned('0' & a) -
+                    unsigned('0' & b));
 
-            when "011" =>
-                sig_res <= a(3 downto 0) & '0';                     -- Multiply by 2 (Shift Left)
+            when "011" =>  -- Multiply by 2 (Shift Left)
+                sig_res <= a(3 downto 0) & '0';
 
-            when "100" =>
-                sig_res <= "00" & a(3 downto 1);                    -- Divide by 2 (Shift Right)
+            when "100" =>  -- Divide by 2 (Shift Right)
+                sig_res <= "00" & a(3 downto 1);
 
-            when "101" =>
-                sig_res <= std_logic_vector(unsigned('0' & a) + 1); -- Increment A
+            when "101" =>  -- Increment A
+                sig_res <= std_logic_vector(
+                    unsigned('0' & a) + 1);
 
-            when "110" =>
-                sig_res <= std_logic_vector(unsigned('0' & a) - 1); -- Decrement A
+            when "110" =>  -- Decrement A
+                sig_res <= std_logic_vector(
+                    unsigned('0' & a) - 1);
 
-            when "111" =>
-                sig_res <= '0' & (a xor b);                         -- XOR
-
-            when others =>
-                sig_res <= "00000";                                 -- Default case
+            when others =>  -- Default case
+                sig_res <= b"0_0000";
 
         end case;
 
@@ -72,8 +73,8 @@ begin
 
     -- Assign outputs
     result <= sig_res(3 downto 0);
-    carry  <= sig_res(4); -- Carry bit
+    carry  <= sig_res(4);  -- Carry bit
     zero   <= '1' when sig_res(3 downto 0) = "0000" else
-              '0';        -- Zero flag
+              '0';         -- Zero flag
 
 end architecture behavioral;

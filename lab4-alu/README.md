@@ -105,11 +105,13 @@ An **opcode** (short for operation code) is a part of a machine language instruc
        begin
            case opcode is
                when "000" =>  -- NOT
-                   sig_res <= '0' & not a;  -- NOT A
+                   sig_res <= '0' & not a;
 
                when "010" =>  -- ADD
-                   sig_res <= std_logic_vector(unsigned('0' & a) +
-                                               unsigned('0' & b));
+                   sig_res <= std_logic_vector(
+                       unsigned('0' & a) +
+                       unsigned('0' & b)
+                   );
 
 
                -- WRITE YOUR ALU OPERATIONS HERE
@@ -151,8 +153,6 @@ An **opcode** (short for operation code) is a part of a machine language instruc
    | `SW_A` | in  | `std_logic_vector(3 downto 0)` | First operand |
    | `SW_B` | in  | `std_logic_vector(3 downto 0)` | Second operand |
    | `SW_OPCODE` | in  | `std_logic_vector(2 downto 0)` | Operation selector |
-   | `LED_A` | out | `std_logic_vector(3 downto 0)` | Show value A |
-   | `LED_B` | out | `std_logic_vector(3 downto 0)` | Show value B |
    | `LED_RESULT` | out | `std_logic_vector(3 downto 0)` | Show result |
    | `LED_RED` | out | `std_logic` | Show output carry flag |
    | `LED_BLUE` | out | `std_logic` | Show zero flag |
@@ -165,7 +165,6 @@ An **opcode** (short for operation code) is a part of a machine language instruc
    | `CG` | out | `std_logic` | Cathode of segment G |
    | `DP` | out | `std_logic` | Decimal point |
    | `AN` | out | `std_logic_vector(7 downto 0)` | Common anodes of all on-board displays |
-   | `BTNC` | in | `std_logic` | Clear the display |
 
 2. Copy design source file `bin2seg.vhd` from the previous lab to `YOUR-PROJECT-FOLDER/alu.srcs/sources_1/new/` folder and add it to the project.
 
@@ -175,30 +174,30 @@ An **opcode** (short for operation code) is a part of a machine language instruc
 
    ```vhdl
    architecture behavioral of top_level is
-     -- Component declaration for 4-bit alu
+       -- Component declaration for 4-bit alu
 
 
-     -- Component declaration for bin2seg
+       -- Component declaration for bin2seg
 
 
-     -- Local signal for alu result
+       -- Local signal for alu result
 
 
    begin
 
-     -- Component instantiation of 4-bit alu
+       -- Component instantiation of 4-bit alu
 
 
-     -- Component instantiation of bin2seg
+       -- Component instantiation of bin2seg
 
 
-     -- Turn off decimal point
+       -- Turn off decimal point
 
 
-     -- Display input and output values on LEDs
+       -- Display output value on LEDs
 
 
-     -- Set display position
+       -- Set display position
 
 
    end architecture behavioral;

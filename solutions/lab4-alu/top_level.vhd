@@ -21,8 +21,6 @@ entity top_level is
         SW_A       : in    std_logic_vector(3 downto 0); --! First operand A
         SW_B       : in    std_logic_vector(3 downto 0); --! Second operand B
         SW_OPCODE  : in    std_logic_vector(2 downto 0); --! Operation selector
-        LED_A      : out   std_logic_vector(3 downto 0); --! Show value A
-        LED_B      : out   std_logic_vector(3 downto 0); --! Show value B
         LED_RESULT : out   std_logic_vector(3 downto 0); --! Show result
         LED_RED    : out   std_logic;                    --! Show output carry flag
         LED_BLUE   : out   std_logic;                    --! Show zero flag
@@ -34,8 +32,7 @@ entity top_level is
         CF         : out   std_logic;                    --! Cathode of segment F
         CG         : out   std_logic;                    --! Cathode of segment G
         DP         : out   std_logic;                    --! Decimal point
-        AN         : out   std_logic_vector(7 downto 0); --! Common anodes of all on-board displays
-        BTNC       : in    std_logic                     --! Clear the display
+        AN         : out   std_logic_vector(7 downto 0)  --! Common anodes of all on-board displays
     );
 end entity top_level;
 
@@ -81,7 +78,7 @@ begin
     -- Component instantiation of bin2seg
     display : component bin2seg
         port map (
-            clear  => BTNC,
+            clear  => '0',
             bin    => sig_tmp,
             seg(6) => CA,
             seg(5) => CB,
@@ -95,9 +92,7 @@ begin
     -- Turn off decimal point
     DP <= '1';
 
-    -- Display input & output values on LEDs
-    LED_A      <= SW_A;
-    LED_B      <= SW_B;
+    -- Display output value on LEDs
     LED_RESULT <= sig_tmp;
 
     -- Set display position

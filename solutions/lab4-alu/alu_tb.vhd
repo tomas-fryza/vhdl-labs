@@ -4,7 +4,6 @@
 
 library ieee;
     use ieee.std_logic_1164.all;
-    use ieee.numeric_std.all; -- Package for data type conversions
 
 entity tb_alu_4bit is
 end entity tb_alu_4bit;
@@ -42,24 +41,26 @@ begin
     stimuli : process is
     begin
 
-        -- EDIT Adapt initialization as needed
-        a      <= (others => '0');
-        b      <= (others => '0');
-        opcode <= (others => '0');
-
         report "==== START ====";
-        a <= x"A";
-        b <= x"6";
+        a <= x"9";
+        b <= x"7";
 
-        -- Loop for several instructions
-        for i in 0 to 7 loop
+        -- NOT
+        opcode <= "000"; wait for 100 ns;
+        -- ADD
+        opcode <= "001"; wait for 100 ns;
+        -- SUB
+        opcode <= "010"; wait for 100 ns;
+        -- MUL 2
+        opcode <= "011"; wait for 100 ns;
+        -- DIV 2
+        opcode <= "100"; wait for 100 ns;
+        -- INC
+        opcode <= "101"; wait for 100 ns;
+        -- DEC
+        opcode <= "110"; wait for 100 ns;
 
-            -- Convert decimal value `i` to 3-bit wide binary
-            opcode <= std_logic_vector(to_unsigned(i, 3));
-            wait for 50 ns;
-
-        end loop;
-
+        report "==== STOP ====";
         wait;
 
     end process stimuli;
