@@ -118,7 +118,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
 
 
                when others =>
-                   sig_res <= b"0_0000";  -- Default case
+                   sig_res <= (others => '0');  -- Default case
            end case;
        end process p_alu;
 
