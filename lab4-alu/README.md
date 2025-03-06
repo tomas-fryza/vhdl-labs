@@ -194,10 +194,10 @@ An **opcode** (short for operation code) is a part of a machine language instruc
        -- Turn off decimal point
 
 
-       -- Display output value on LEDs
-
-
        -- Set display position
+
+
+       -- Display output value on LEDs
 
 
    end architecture behavioral;
