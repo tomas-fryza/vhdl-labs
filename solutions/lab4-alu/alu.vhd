@@ -3,7 +3,8 @@
 --! @version 1.0
 --! @copyright (c) 2025 Tomas Fryza, MIT license
 --!
---! This VHDL module implements ...
+--! This VHDL module implements 4-bit ALU, including
+--! 7 operations.
 --!
 --! Developed using TerosHDL, Vivado 2023.2.
 --! Tested on Nexys A7-50T board and xc7a50ticsg324-1L FPGA.

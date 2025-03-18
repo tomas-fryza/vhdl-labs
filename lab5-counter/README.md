@@ -124,27 +124,15 @@ A simple **N-bit counter** is a digital circuit and has N output bits representi
       * Add `use ieee.std_logic_unsigned.all;` package to use arithmetic operations with `std_logic_vector` data type
       * Outside the process, connect internal signal to counter output
 
-   **FYI:** The structure below decsribes a 4-bit counter in RTL (higher) level.
+   **FYI:** The structure below describes a 4-bit counter in RTL (higher) level.
 
    ![simple counter rtl](images/teros_simple-counter_rtl.png)
-
-3. Create [testbench](https://vhdl.lapinoo.net/testbench/) file `tb_simple_counter`, run the simulation, and test the functionality of `rst` and `en` signals.
-
-   > Note that for any vector, it is possible to change the numeric system in the simulation which represents the current value. To do so, right-click the vector name and select **Radix > Unsigned Decimal** from the context menu. You can change the vector color by **Signal Color** as well.
-
-<!--
-   > ![Change radix](images/vivado_radix.png)
--->
-
-4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis. Note that RTL (Register Transfer Level) represents digital circuit at the abstract level.
-
-5. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
 
 <a name="part2"></a>
 
 ## Part 2: VHDL generics
 
-A VHDL **generic** allows the designer to parametrize the entity during the component instantiation and it is a great way to create modular code that can be quickly changed to accomodate a wide variety of designs. Since a generic cannot be modified inside the architecture, it is like a constant.
+A VHDL **generic** allows the designer to parametrize the entity during the component instantiation and it is a great way to create modular code that can be quickly changed to accommodate a wide variety of designs. Since a generic cannot be modified inside the architecture, it is like a constant.
 
 Instead of writing:
 
@@ -162,7 +150,7 @@ We can write:
    ```vhdl
    entity some_entity is
        generic (
-           N_BITS : integer := some_defaul_value
+           N_BITS : integer := some_default_value
        );
        port (
            clk     : in    std_logic;
@@ -172,9 +160,13 @@ We can write:
    end entity some_entity;
    ```
 
-1. Extend the code from the previous part and use generics in both, design and testbench sources.
 
-   In **design source**, use generic `N_BITS` to define number of bits for the counter. In **testbench**, define a constant `C_NBITS`, prior to declaring the component and use it to declare your internal counter signal:
+
+
+
+1. Create [testbench](https://vhdl.lapinoo.net/testbench/) file `simple_counter_tb`.
+
+2. In **design source**, use generic `N_BITS` to define number of bits for the counter. In **testbench**, define a constant `C_NBITS`, prior to declaring the component and use it to declare your internal counter signal:
 
    ```vhdl
    -- Design source file
@@ -191,7 +183,7 @@ We can write:
    ```vhdl
    -- Testbench file
    constant C_NBITS : integer := 6; --! Simulating number of bits
-   signal count : std_logic_vector(C_NBIT-1 downto 0);
+   signal count : std_logic_vector(C_NBITS-1 downto 0);
    ```
 
    When you instantiate your counter, you then also bind the `N_BITS` generic to this constant:
@@ -204,7 +196,15 @@ We can write:
        ...
    ```
 
-2. Simulate your design and try several `C_NBITS` values.
+3. Run the simulation, test the functionality of `rst` and `en` signals, and try several `C_NBITS` values.
+
+   > Note that for any vector, it is possible to change the numeric system in the simulation which represents the current value. To do so, right-click the vector name and select **Radix > Unsigned Decimal** from the context menu. You can change the vector color by **Signal Color** as well.
+
+   > ![Change radix](images/vivado_radix.png)
+
+4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis. Note that RTL (Register Transfer Level) represents digital circuit at the abstract level.
+
+5. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
 
 <a name="part3"></a>
 
@@ -246,7 +246,7 @@ To drive another logic in the design (with slower clock), it is better to genera
    | `rst`   | input  | `std_logic` | High-active synchronous reset
    | `pulse` | output | `std_logic` | Clock enable pulse signal
 
-2. Add generic `N_PERIODS` to the entity defining the default number of clk periodes to generate one pulse.
+2. Add generic `N_PERIODS` to the entity defining the default number of clk periods to generate one pulse.
 
    ```vhdl
    entity clock_enable is
@@ -280,7 +280,7 @@ To drive another logic in the design (with slower clock), it is better to genera
        p_clk_enable : process (clk) is
        begin
 
-           -- Synchronous proces
+           -- Synchronous process
            if (rising_edge(clk)) then
                -- if high-active reset then
                    -- Clear integer counter
@@ -305,7 +305,7 @@ To drive another logic in the design (with slower clock), it is better to genera
 
 5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
-6. Create a VHDL simulation source `tb_clock_enable`, simulate reset functionality and 100 clock periodes. Test several `N_PERIODS` values within your testbench.
+6. Create a VHDL simulation source `clock_enable_tb`, simulate reset functionality and 100 clock periods. Test several `N_PERIODS` values within your testbench.
 
    > **Solution:** [https://www.edaplayground.com/x/5LiJ](https://www.edaplayground.com/x/5LiJ)
 
@@ -321,9 +321,17 @@ To drive another logic in the design (with slower clock), it is better to genera
 
 ## Part 4: Top level VHDL code
 
-1. Create a new VHDL design source `top_level` in your project and implement the 4-bit up counter on the Nexys A7 board. Let the counter value increments every 250 ms and it is show on 7-segment display.
+1. Create a new VHDL design source `top_level` in your project and implement the 4-bit up counter on the Nexys A7 board. Let the counter value increment every 250 ms and choose one of the following implementations to display the output values ​​on: LEDs or a 7-segment display.
 
-2. Use **Define Module** dialog and define I/O ports as follows.
+   * **Version 1: LEDs:**
+
+   ![top level ver1](images/top-level_ver1.png)
+
+   * **Version 2: 7-segment display:**
+
+   ![top level ver2](images/top-level_1-counter_structure.png)
+
+2. Note that, the following text describes the implementation of version 2. Use **Define Module** dialog and define I/O ports as follows.
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
@@ -342,8 +350,6 @@ To drive another logic in the design (with slower clock), it is better to genera
 3. Copy design source file `bin2seg.vhd` from the previous lab to `YOUR-PROJECT-FOLDER/counter.srcs/sources_1/new/` folder and add it to the project.
 
 4. Use component declaration and instantiation of `simple_counter`, `clock_enable`, and `bin2seg`, and define the top-level architecture as follows.
-
-   ![top level](images/top-level_1-counter_structure.png)
 
    ```vhdl
    architecture behavioral of top_level is
@@ -389,7 +395,7 @@ To drive another logic in the design (with slower clock), it is better to genera
 
 ## Challenges
 
-1. Add a second instantiation (copy) of the counter and clock enable entities and make a 16-bit counter with a 2 ms time base. Display the counter values on LEDs.
+1. Add a second instantiation (copy) of the counter and clock enable components and make a 16-bit counter with a 2 ms time base. Display the counter values on LEDs.
 
    ![top level](images/top-level_2-counter_structure.png)
 
