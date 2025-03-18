@@ -36,7 +36,7 @@
 
 A binary **shift register** is a digital circuit that sequentially shifts data bits, either left or right, through a series of flip-flops controlled by a clock signal. It operates in parallel-in, serial-out (PISO) or serial-in, parallel-out (SIPO) modes. Shift registers are commonly used for serial-to-parallel and parallel-to-serial data conversion, data storage, and data transmission.
 
-**FYI:** The structures below decsribe a simple 4-bit shift register in RTL (higher) and gate (lower) levels.
+**FYI:** The structures below describe a simple 4-bit shift register in RTL (higher) and gate (lower) levels.
 
 **RTL level:**
 
@@ -172,7 +172,7 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
 
 3. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
-4. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `tb_lfsr`, execute the simulation, and validate the functionality of enable and seed values. Experiment with various tap configurations for XNOR gates and analyze the length of the generated pseudo-random sequence.
+4. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `lfsr_tb`, execute the simulation, and validate the functionality of enable and seed values. Experiment with various tap configurations for XNOR gates and analyze the length of the generated pseudo-random sequence.
 
    | **Taps** | **Length** | **Values** |
    | :-: | :-: | :-- |
