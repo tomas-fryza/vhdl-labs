@@ -117,7 +117,7 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
                -- else if load = 1 then load default counter value lfst_in
    
                elsif <clock_enable>='1' then
-                   <reg_name>(3 downto 1) <= <reg_name>(2 downto 0) ;
+                   <reg_name>(N_BITS-1 downto 1) <= <reg_name>(N_BITS-2 downto 0) ;
                    <reg_name>(0) <= not(<reg_name>(3) XOR <reg_name>(2));  -- !!! TEMPLATE IS WRONG !!!
                end if;
            end if;
