@@ -113,6 +113,9 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
            if ( <clock>'event and <clock> ='1') then
                if (<reset> = '1') then
                    <reg_name> <= (others => '0');
+   
+               -- else if load = 1 then load default counter value lfst_in
+   
                elsif <clock_enable>='1' then
                    <reg_name>(3 downto 1) <= <reg_name>(2 downto 0) ;
                    <reg_name>(0) <= not(<reg_name>(3) XOR <reg_name>(2));  -- !!! TEMPLATE IS WRONG !!!
@@ -122,6 +125,8 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
 
        -- Assign internal register to output
        <output> <= <reg_name>;
+
+       -- Create a `done` pulse when sig_reg = lfsr_in
 
    end Behavioral;
    ```
@@ -134,14 +139,6 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
    To implement a linear feedback for an LFSR counter in VHDL, an XNOR gate is integrated with a 4-bit shift register. Use the feedback taps `sig_reg(3)` and `sig_reg(2)`, and connect it to the least significant bit (LSB) of the internal register.
 
 4. Outside the LFSR process, produce a pulse `done` when the internal register matches the initial seed value.
-
-   ```vhdl
-   architecture Behavioral of lfsr is
-       ...
-       -- Create a `done` pulse when sig_reg = load_data
-
-   end Behavioral;
-   ```
 
 5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
