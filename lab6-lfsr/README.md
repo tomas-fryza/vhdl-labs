@@ -193,24 +193,26 @@ end generate label;
 
    ```vhdl
        ...
+   architecture Behavioral of lfsr is
        -- Define an internal feedback with xnor gate(s)
        signal sig_feedback : std_logic;
-   process (clk)
    begin
-       ...
-             <reg_name>(0) <= sig_feedback;
-       ...
-   end process;
+       process (clk)
+       begin
+           ...
+           <reg_name>(0) <= sig_feedback;
+           ...
+       end process;
 
-   -- Create feedback for 4-bit LFSR counter
-   sig_feedback <= sig_reg(3) xnor sig_reg(2);
-   ...
+       -- Create feedback for 4-bit LFSR counter
+       sig_feedback <= sig_reg(3) xnor sig_reg(2);
+   end Behavioral;
    ```
 
 2. Use conditional `generate` statements and define `sig_feedback` for several `N_BITS` values. See [AMD LFSR Counters](https://docs.xilinx.com/v/u/en-US/xapp052) to get the taps for maximum-length LFSR counters. Note that, the taps here are indexed from 1 and not from 0, ie. 4-bit counter use taps 4 and 3.
 
    ```vhdl
-   g_4bit : if N_BITS = 4 generate
+   G_4BIT : if N_BITS = 4 generate
        -- Create feedback for 4-bit LFSR counter
        sig_feedback <= sig_reg(3) xnor sig_reg(2);
    end generate g_4bit;
@@ -266,9 +268,6 @@ end generate label;
 
 
        -- Set display position
-
-
-       -- Set output LEDs (green)
 
 
    end architecture behavioral;
