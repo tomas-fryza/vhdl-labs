@@ -1,4 +1,4 @@
-# Lab 6: Shift register and LFSR
+# Lab 6: LFSR counter
 
 * [Pre-Lab preparation](#preparation)
 * [Part 1: n-bit LFSR (Linear Feedback Shift Register) counter](#part1)
@@ -215,7 +215,7 @@ end generate label;
    G_4BIT : if N_BITS = 4 generate
        -- Create feedback for 4-bit LFSR counter
        sig_feedback <= sig_reg(3) xnor sig_reg(2);
-   end generate g_4bit;
+   end generate G_4BIT;
    ```
 
 3. Simulate your design and try several `C_NBITS` values.
@@ -224,7 +224,7 @@ end generate label;
 
 ## Part 3: Top level VHDL code
 
-1. Create a VHDL design source named `top_level` and implement a n-bit LFSR counter on the Nexys A7 board. Configure the counter to increment every 500 ms, displaying the count on the 7-segment display or LEDs according to your choice.
+1. Create a VHDL design source named `top_level` and implement: an n-bit LFSR counter and LEDs on the Nexys A7 board (Version 1) or a 4-bit LFSR counter and 7-segment display (Version 2).
 
    * **Version 1:**
 
@@ -234,34 +234,31 @@ end generate label;
 
    ![top level](images/top-level_lfsr_4-bit_structure.png)
 
-
-   Use component declaration and instantiation of `lfsr`, `clock_enable`, and `bin2seg`, and define the top-level architecture as follows.
-
-   **Note:** The `enable_clock` and `bin2seg` components from the previous lab are required. Do not forget to copy both files to `YOUR-PROJECT-FOLDER/lfsr.srcs/sources_1/new/` folder and add them to the project.
+   **Note:** The `enable_clock` and `bin2seg` components from the previous lab(s) are required. Do not forget to **copy files** you need to `YOUR-PROJECT-FOLDER/lfsr.srcs/sources_1/new/` folder and **add them to the project**.
 
    ```vhdl
    architecture behavioral of top_level is
-       -- Component declaration for clock enable
+       -- Component declaration: clock enable
 
 
-       -- Component declaration for LFSR counter
+       -- Component declaration: LFSR counter
 
 
-       -- Component declaration for bin2seg
+       -- Component declaration: bin2seg
 
 
-       -- Local signals for a counter: 4-bit @ 500 ms
+       -- Local signals for counter
 
 
    begin
 
-       -- Component instantiation of clock enable for 500 ms
+       -- Component instantiation: clock enable
 
 
-       -- Component instantiation of 4-bit LFSR counter
+       -- Component instantiation: LFSR counter
 
 
-       -- Component instantiation of bin2seg
+       -- Component instantiation: bin2seg
 
 
        -- Turn off decimal point
@@ -273,7 +270,7 @@ end generate label;
    end architecture behavioral;
    ```
 
-2. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t`, uncomment the used pins according to the `top_level` entity.
+2. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t`, uncomment the used pins according to your `top_level` entity.
 
 3. Compile the project (ie. transform the high-level VHDL code into a binary configuration file) and download the generated bitstream `YOUR-PROJECT-FOLDER/lfsr.runs/impl_1/top_level.bit` into the FPGA chip.
 
@@ -281,7 +278,9 @@ end generate label;
 
 ## Challenges
 
-1. tbd
+1. Modify the output pulse signal from the clock enable component based on a control signal (like a switch). You will be able to enable or disable the pulse signal itself, to achieve the LFSR pause/resume functionality.
+
+2. Implement an 8-bit LFSR counter and display its value on two 7-segment displays. Split the 8-bit LFSR value into two 4-bit nibbles, each corresponding to a digit for the 7-segment displays. Use a 1-bit simple counter (from the last lab) to alternate between the two displays at a suitable timing interval, creating the illusion that both digits are shown simultaneously. Ensure that each 4-bit value is properly encoded to display the corresponding digit on the 7-segment displays.
 
 <a name="references"></a>
 
