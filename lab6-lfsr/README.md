@@ -110,11 +110,11 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
    begin
        process(<clock>)
        begin
-           if ( <clock>'event and <clock> ='1') then
+           if rising_edge(<clock>) then
                if (<reset> = '1') then
                    <reg_name> <= (others => '0');
    
-               -- else if load = 1 then load default counter value lfst_in
+               -- else if load = 1 then load default counter value lfsr_in
    
                elsif <clock_enable>='1' then
                    <reg_name>(N_BITS-1 downto 1) <= <reg_name>(N_BITS-2 downto 0) ;
@@ -189,7 +189,7 @@ label : for parameter in range generate
 end generate label;
 ```
 
-1. Add an intenal signal `sig_feedback` and define the XNOT gate outside the process.
+1. Add an internal signal `sig_feedback` and define the XNOR gate outside the process.
 
    ```vhdl
        ...
