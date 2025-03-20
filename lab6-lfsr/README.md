@@ -52,7 +52,6 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
 
 ![lfsr4 gate](images/teros_lfsr4_gates.png)
 
-
 1. Run Vivado, create a new project and implement a 4-bit LFSR counter with clock enable and load signals:
 
    1. Project name: `lfsr`
@@ -110,7 +109,7 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
    begin
        process(<clock>)
        begin
-           if rising_edge(<clock>) then
+           if (<clock>'event and <clock> ='1') then
                if (<reset> = '1') then
                    <reg_name> <= (others => '0');
    
@@ -131,23 +130,30 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
    end Behavioral;
    ```
 
-   Hints:
-      * Use `rising_edge(clk)` instead of `clk='1' and clk'event` to test clock edge.
+   **TODOs:**
       * Define an internal signal `sig_reg` of data type `std_logic_vector(N_BITS-1 downto 0)` to implement the shift register.
+      * Use `rising_edge(clk)` instead of `clk='1' and clk'event` to test clock edge.
       * Assign the whole internal register to the output `lfsr_out <= sig_reg;`.
+      * Assign the `done` pulse.
 
    To implement a linear feedback for an LFSR counter in VHDL, an XNOR gate is integrated with a 4-bit shift register. Use the feedback taps `sig_reg(3)` and `sig_reg(2)`, and connect it to the least significant bit (LSB) of the internal register.
 
-4. Outside the LFSR process, produce a pulse `done` when the internal register matches the initial seed value.
+4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
-5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
-
-6. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `lfsr_tb`. In **testbench**, define a constant `C_NBITS`, prior to declaring the component and use it to declare your internal counter signal:
+5. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `lfsr_tb`. In **testbench**, define a constant `C_NBITS`, prior to declaring the component and use it to declare your internal counter signal:
 
    ```vhdl
    -- Testbench file
+   ...
+   component lfsr is
+       generic (
+           N_BITS : integer
+       );
+   ...
+
    constant C_NBITS : integer := 4; --! Simulating number of bits
    signal lfsr_out : std_logic_vector(C_NBITS-1 downto 0);
+   ...
    ```
 
    When you instantiate your counter, you then also bind the `N_BITS` generic to this constant:
@@ -178,13 +184,13 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
 In VHDL, there is a way for iteratively or conditionally elaborating a part of a description. Typically, it is used to define a group of identical components using a single component specification and then repeating it using the `generate` mechanism.
 
 ```vhdl
--- Conditional
-label : if condition generate
+-- Iterative
+label : for parameter in range generate
     { concurrent_statements }
 end generate label;
 
--- Iterative
-label : for parameter in range generate
+-- Conditional
+label : if condition generate
     { concurrent_statements }
 end generate label;
 ```
