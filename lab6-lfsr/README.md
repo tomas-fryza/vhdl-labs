@@ -67,9 +67,9 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
       | :-: | :-: | :-- | :-- |
       | `clk`  | input  | `std_logic` | Main clock |
       | `rst`  | input  | `std_logic` | High-active synchronous reset |
+      | `en`   | input  | `std_logic` | Clock enable input |
       | `load` | input  | `std_logic` | Enable signal to load default/seed data |
       | `lfsr_in` | input  | `std_logic_vector(3 downto 0)` | Default/seed data |
-      | `en`   | input  | `std_logic` | Clock enable input |
       | `done` | output  | `std_logic` | Sequence completed |
       | `lfsr_out` | output | `std_logic_vector(3 downto 0)` | Register value |
 
@@ -79,10 +79,11 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
    -- Design source file
    entity lfsr is
        generic (
-           N_BITS : integer := 4 --! Default number of bits
+           N_BITS : positive := 4 --! Default number of bits
        );
        port (
            ...
+           lfsr_in : out std_logic_vector(N_BITS-1 downto 0);
            lfsr_out : out std_logic_vector(N_BITS-1 downto 0)
        );
    end entity lfsr;
@@ -126,11 +127,12 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
        <output> <= <reg_name>;
 
        -- Create a `done` pulse when sig_reg = lfsr_in
+       done <= ...
 
    end Behavioral;
    ```
 
-   **TODOs:**
+   **Modifications:**
       * Define an internal signal `sig_reg` of data type `std_logic_vector(N_BITS-1 downto 0)` to implement the shift register.
       * Use `rising_edge(clk)` instead of `clk='1' and clk'event` to test clock edge.
       * Assign the whole internal register to the output `lfsr_out <= sig_reg;`.
@@ -138,20 +140,18 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
 
    To implement a linear feedback for an LFSR counter in VHDL, an XNOR gate is integrated with a 4-bit shift register. Use the feedback taps `sig_reg(3)` and `sig_reg(2)`, and connect it to the least significant bit (LSB) of the internal register.
 
-4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
-
-5. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `lfsr_tb`. In **testbench**, define a constant `C_NBITS`, prior to declaring the component and use it to declare your internal counter signal:
+4. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `lfsr_tb`. In **testbench**, define a constant `C_NBITS`, prior to declaring the component and use it to declare your internal counter signal:
 
    ```vhdl
    -- Testbench file
    ...
    component lfsr is
        generic (
-           N_BITS : integer
+           N_BITS : positive
        );
    ...
 
-   constant C_NBITS : integer := 4; --! Simulating number of bits
+   constant C_NBITS : positive := 4; -- !!! Simulating number of bits !!!
    signal lfsr_out : std_logic_vector(C_NBITS-1 downto 0);
    ...
    ```
@@ -177,6 +177,8 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
    | 2, 0 |  |  |
    | 1, 0 |  |  |
 
+5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
+
 <a name="part2"></a>
 
 ## Part 2: `Generate` statement
@@ -195,32 +197,32 @@ label : if condition generate
 end generate label;
 ```
 
-1. Add an internal signal `sig_feedback` and define the XNOR gate outside the process.
+1. Add an internal signal `sig_fb` and define the XNOR gate outside the process.
 
    ```vhdl
-       ...
    architecture Behavioral of lfsr is
+       ...
        -- Define an internal feedback with xnor gate(s)
-       signal sig_feedback : std_logic;
+       signal sig_fb : std_logic;
    begin
        process (clk)
        begin
            ...
-           <reg_name>(0) <= sig_feedback;
+           sig_reg(0) <= sig_fb;
            ...
        end process;
 
        -- Create feedback for 4-bit LFSR counter
-       sig_feedback <= sig_reg(3) xnor sig_reg(2);
+       sig_fb <= sig_reg(3) xnor sig_reg(2);
    end Behavioral;
    ```
 
-2. Use conditional `generate` statements and define `sig_feedback` for several `N_BITS` values. See [AMD LFSR Counters](https://docs.xilinx.com/v/u/en-US/xapp052) to get the taps for maximum-length LFSR counters. Note that, the taps here are indexed from 1 and not from 0, ie. 4-bit counter use taps 4 and 3.
+2. Use conditional `generate` statements and define `sig_fb` for several `N_BITS` values. See [AMD LFSR Counters](https://docs.xilinx.com/v/u/en-US/xapp052) to get the taps for maximum-length LFSR counters. Note that, the taps here are indexed from 1 and not from 0, ie. 4-bit counter uses taps 4 and 3.
 
    ```vhdl
    G_4BIT : if N_BITS = 4 generate
        -- Create feedback for 4-bit LFSR counter
-       sig_feedback <= sig_reg(3) xnor sig_reg(2);
+       sig_fb <= sig_reg(3) xnor sig_reg(2);
    end generate G_4BIT;
    ```
 
@@ -230,7 +232,7 @@ end generate label;
 
 ## Part 3: Top level VHDL code
 
-1. Create a VHDL design source named `top_level` and implement: an n-bit LFSR counter and LEDs on the Nexys A7 board (Version 1) or a 4-bit LFSR counter and 7-segment display (Version 2).
+1. Create a VHDL design source named `top_level` and implement: an n-bit LFSR counter with LEDs on the Nexys A7 board (Version 1) or a 4-bit LFSR counter with 7-segment display (Version 2).
 
    * **Version 1:**
 
@@ -240,7 +242,7 @@ end generate label;
 
    ![top level](images/top-level_lfsr_4-bit_structure.png)
 
-   **Note:** The `enable_clock` and `bin2seg` components from the previous lab(s) are required. Do not forget to **copy files** you need to `YOUR-PROJECT-FOLDER/lfsr.srcs/sources_1/new/` folder and **add them to the project**.
+   **Note:** The `enable_clock` and `bin2seg` components from the previous lab(s) are required. Do not forget to **copy files** you need to `YOUR-PROJECT-FOLDER/lfsr.srcs/sources_1/new/` folder and **add them to the project** or use **Copy scripts to project** checkbox while adding design source files in Vivado.
 
    ```vhdl
    architecture behavioral of top_level is
@@ -253,7 +255,7 @@ end generate label;
        -- Component declaration: bin2seg
 
 
-       -- Local signals for counter
+       -- Local signals
 
 
    begin
@@ -284,9 +286,9 @@ end generate label;
 
 ## Challenges
 
-1. Modify the output pulse signal from the clock enable component based on a control signal (like a switch). You will be able to enable or disable the pulse signal itself, to achieve the LFSR pause/resume functionality.
+1. In `top_level` file, enable or disable the pulse signal from the clock enable component using an extra switch. You will be able to achieve the LFSR pause/resume functionality.
 
-2. Implement an 8-bit LFSR counter and display its value on two 7-segment displays. Split the 8-bit LFSR value into two 4-bit nibbles, each corresponding to a digit for the 7-segment displays. Use a 1-bit simple counter (from the last lab) to alternate between the two displays at a suitable timing interval, creating the illusion that both digits are shown simultaneously. Ensure that each 4-bit value is properly encoded to display the corresponding digit on the 7-segment displays.
+2. Implement an 8-bit LFSR counter and display its value on two 7-segment displays. Split the 8-bit LFSR value into two 4-bit nibbles, each corresponding to a digit for the 7-segment displays. Use a 1-bit simple counter (from the previous lab) to alternate between the two displays at a suitable timing interval, creating the illusion that both digits are shown simultaneously. Ensure that each 4-bit value is properly encoded to display the corresponding digit on the 7-segment displays.
 
 <a name="references"></a>
 
