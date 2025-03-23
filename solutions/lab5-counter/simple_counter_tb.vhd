@@ -16,7 +16,7 @@ architecture tb of tb_simple_counter is
 
   component simple_counter is
     generic (
-      n_bits : positive
+      n_bits : integer
     );
     port (
       clk   : in    std_logic;
@@ -26,7 +26,7 @@ architecture tb of tb_simple_counter is
     );
   end component simple_counter;
 
-  constant c_nbits : positive := 5;
+  constant c_nbits : integer := 5;
   signal   clk     : std_logic;
   signal   rst     : std_logic;
   signal   en      : std_logic;

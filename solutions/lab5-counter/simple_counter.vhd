@@ -6,7 +6,7 @@
 --! Implementation of N-bit up counter with enable input and
 --! high level reset. The width of the counter (number of bits)
 --! is set generically using `N_BITS`. The data type of the
---! internal counter is `pocitive`.
+--! internal counter is `integer`.
 --!
 --! Developed using TerosHDL, Vivado 2023.2, and EDA Playground.
 --! Tested on Nexys A7-50T board and xc7a50ticsg324-1L FPGA.
@@ -20,7 +20,7 @@ library ieee;
 
 entity simple_counter is
   generic (
-    n_bits : positive := 3 --! Number of bits
+    n_bits : integer := 3 --! Number of bits
   );
   port (
     clk   : in    std_logic;                            --! Main clock
@@ -35,7 +35,7 @@ end entity simple_counter;
 architecture behavioral of simple_counter is
 
   --! Local counter
-  signal sig_count : positive range 0 to (2 ** n_bits - 1);
+  signal sig_count : integer range 0 to (2 ** n_bits - 1);
 
 begin
 

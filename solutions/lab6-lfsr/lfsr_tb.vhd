@@ -12,7 +12,7 @@ architecture tb of tb_lfsr is
 
   component lfsr is
     generic (
-      n_bits : positive
+      n_bits : integer
     );
     port (
       clk      : in    std_logic;
@@ -29,7 +29,7 @@ architecture tb of tb_lfsr is
   signal   rst      : std_logic;
   signal   en       : std_logic;
   signal   load     : std_logic;
-  constant c_nbits  : positive := 5; -- !!! Simulating number of bits !!!
+  constant c_nbits  : integer := 5; -- !!! Simulating number of bits !!!
   signal   lfsr_in  : std_logic_vector(c_nbits - 1 downto 0);
   signal   done     : std_logic;
   signal   lfsr_out : std_logic_vector(c_nbits - 1 downto 0);

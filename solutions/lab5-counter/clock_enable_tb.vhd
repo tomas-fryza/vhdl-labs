@@ -12,7 +12,7 @@ architecture tb of tb_clock_enable is
 
   component clock_enable is
     generic (
-      n_periods : positive
+      n_periods : integer
     );
     port (
       clk   : in    std_logic;

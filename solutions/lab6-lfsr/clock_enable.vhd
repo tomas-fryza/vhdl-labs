@@ -18,7 +18,7 @@ library ieee;
 
 entity clock_enable is
   generic (
-    n_periods : positive := 3 --! Default number of clk periodes to generate one pulse
+    n_periods : integer := 3 --! Default number of clk periodes to generate one pulse
   );
   port (
     clk   : in    std_logic; --! Main clock
@@ -32,7 +32,7 @@ end entity clock_enable;
 architecture behavioral of clock_enable is
 
   --! Local counter
-  signal sig_count : positive range 0 to n_periods - 1;
+  signal sig_count : integer range 0 to n_periods - 1;
 
 begin
 

@@ -20,7 +20,7 @@ library ieee;
 
 entity simple_counter is
   generic (
-    n_bits : positive := 3 --! Default number of counter bits
+    n_bits : integer := 3 --! Default number of counter bits
   );
   port (
     clk   : in    std_logic;                            --! Main clock

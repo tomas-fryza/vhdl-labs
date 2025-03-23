@@ -22,7 +22,7 @@ library ieee;
 
 entity lfsr is
   generic (
-    n_bits : positive := 4 --! Default number of bits
+    n_bits : integer := 4 --! Default number of bits
   );
   port (
     clk      : in    std_logic;                             --! Main clock

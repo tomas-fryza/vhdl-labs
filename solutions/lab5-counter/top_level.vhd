@@ -42,7 +42,7 @@ architecture behavioral of top_level is
   -- Component declaration for clock enable
   component clock_enable is
     generic (
-      n_periods : positive
+      n_periods : integer
     );
     port (
       clk   : in    std_logic;
@@ -54,7 +54,7 @@ architecture behavioral of top_level is
   -- Component declaration for simple counter
   component simple_counter is
     generic (
-      n_bits : positive
+      n_bits : integer
     );
     port (
       clk   : in    std_logic;
