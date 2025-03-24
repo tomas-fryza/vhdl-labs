@@ -34,7 +34,7 @@ The repository contains VHDL lab exercises for bachelor course [*Digital Electro
 4. [Arithmetic-logic unit (ALU)](lab4-alu)
 5. [Binary counter](lab5-counter)
 6. [LFSR counter](lab6-lfsr)
-7. [FSM debouncer](lab7-fsm)
+7. [UART Transmitter](lab7-uart)
 8. [VHDL Project](lab8-project)
 
 ## List of VHDL examples
