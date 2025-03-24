@@ -7,6 +7,98 @@
 * [Ultrasonic parking spot detection](https://github.com/247828/BPC-DE1-Project/blob/main/README.md)
 * [VGA](https://github.com/deved9/DE1-project)
 
+## Instructions
+
+*The goal of this project is for small teams of 3-4 students to explore a chosen topic, use the labs's components, develop solutions, simulate and implement them, create documentation, and present the results. Team members will organize and divide tasks among themselves.*
+
+* The students will work on the project for five weeks, ending with a presentation and a practical demonstration (simulations alone are not enough), see the course schedule in e-learning.
+
+* The FPGA code must be written in VHDL and must be implementable on the [Nexys A7-50T board](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual) using the development tools provided during the semester, specifically Vivado.
+
+   ![nexys_a7](images/nexys-a7.png)
+
+* Physical implementation on FPGA is necessary, not just computer simulation.
+
+* Use components created during the semester. Provide detailed simulation testbenches for all your new components.
+
+* Follow coding standards in your codes.
+
+* Strictly follow licenses for third-party libraries/codes !
+
+* Follow ethical rules regarding plagiarism, licensing, and policies for the use of [generative artificial intelligence](https://www.vut.cz/vut/aktuality-f19528/vut-vydalo-zasady-a-doporuceni-k-vyuzivani-generativni-umele-inteligence-d247152).
+
+* Create a public [GitHub](https://github.com/) (or any other online software development platform) repository for your project and publish all files here.
+
+* Provide a list of all tools used during the project, including Machine Learning (some are listed [here](https://github.com/tomas-fryza/avr-course/wiki)).
+
+* A PowerPoint-style presentation is not required; a good A3 poster or `README.md` on GitHub is sufficient.
+
+* During the presentation, you can play a short video (max 1 minute) with subtitles or explanatory captions.
+
+## Help
+
+* **Never, ever** use `rising_edge` or `falling_edge` to test edges of non-clock signals under any circumstances!
+
+* Use hierarchical design, ie. instances, top-level, several files, etc.
+
+* Use synchronous entities with rising edge of `clk`.
+
+* In a synchronous process, the first thing to do is the test of clock edge, then synchronous reset. The only exception is asynchronous operations (try to avoid them).
+
+* Use only input `in` or output `out` ports and not ~~inout~~.
+
+* Use `wait` statements [only in simulations](https://www.vhdl-online.de/courses/system_design/vhdl_language_and_syntax/sequential_statements/wait_statement).
+
+* Except Vivado, we encourage the use of other tools as well:
+   * [EDA Playground](https://www.edaplayground.com/)
+   * [TerosHDL](https://github.com/tomas-fryza/vhdl-course/wiki/How-to-install-TerosHDL-on-Windows-and-Linux)
+   * [ghdl + GtkWave](https://github.com/tomas-fryza/vhdl-course/wiki/How-to-install-ghdl-on-Windows-and-Linux)
+   * [ModelSim](https://www.intel.com/content/www/us/en/software-kit/750666/modelsim-intel-fpgas-standard-edition-software-version-20-1-1.html)
+   * [Live Share](https://code.visualstudio.com/learn/collaboration/live-share), a Visual Studio Code plugin for a real-time collaborative development
+   * [other tools](https://github.com/tomas-fryza/vhdl-course/wiki)
+
+# Recommended README.md file structure
+
+### Team members
+
+* Member 1 (responsible for ...)
+* Member 2 (responsible for ...)
+* Member 3 (responsible for ...)
+* Member 4 (responsible for ...)
+
+### Abstract
+
+An abstract is a short summary of your project, usually about a paragraph (6-7 sentences, 150-250 words) long. A well-written abstract serves multiple purposes: (a) an abstract lets readers get the gist or essence of your project quickly; (b) an abstract prepares readers to follow the detailed information, description, and results in your report; (c) and, later, an abstract helps readers remember key points from your project.
+
+The main contributions of the project are:
+
+* ...
+* ...
+* ...
+
+[Photo(s) of your application with labels of individual parts.]
+
+[Link to A3 project poster.]
+
+[Optional: Link to your short video presentation.]
+
+## Hardware description of demo application
+
+Describe your implementation. Put a descriptive top-level schematic of your application.
+
+## Software description
+
+Put flowchats/state diagrams of your algorithm(s) and direct links to source/testbench files in `src` and `sim` folders.
+
+### Component(s) simulations
+
+Write descriptive text and put simulation screenshots of components you created during the project.
+
+## References
+
+1. Put here the references and online tools you used.
+2. ...
+
 ### Topics 2023/24
 
 **Topic 1: Smart Parking System with Ultrasonic Sensors**
@@ -44,91 +136,3 @@ Description: This project involves the development of a digital voltmeter using 
 **Advanced Topic 2: VGA Image Rendering and Manipulation**
 
 Description: This project involves the development of generating images using VGA output on the Nexys A7 FPGA board. The system will implement algorithms for image rendering and manipulation, enabling the creation of basic shapes, patterns, and color gradients. It will adhere to VGA timing specifications for pixel generation and synchronization, ensuring compatibility with standard VGA displays.
-
-## Instructions
-
-The objective of this group project is to collaborate within small teams of 3-4 students, explore a chosen topic, utilize lab components, develop innovative solutions, simulate and execute these solutions, generate project documentation, and present the final outcomes. Team members are responsible for organizing and assigning roles and tasks among themselves.
-
-* Students will work on the project in the lab during Weeks 8 to 12 (or 13) of the semester, culminating in a joint presentation.
-
-* Students must submit a link to their GitHub repository containing the VHDL project, required images, documents, and a descriptive README file. Students use the README file for the presentation.
-
-* All FPGA code must be written in VHDL and must be implementable on the [Nexys A7-50T board](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual) using the development tools provided during the semester, specifically Vivado.
-
-   ![nexys_a7](images/nexys-a7.png)
-
-* Use components designed and tested during the semester.
-
-* Follow ethical rules regarding plagiarism, licensing, and policies for the use of [generative artificial intelligence](https://www.vut.cz/vut/aktuality-f19528/vut-vydalo-zasady-a-doporuceni-k-vyuzivani-generativni-umele-inteligence-d247152).
-
-* Provide detailed simulation testbenches for all your new components.
-
-* Physical implementation on FPGA is necessary, not just computer simulation.
-
-* Students create an illuatrative video (<1 min.) about their application with explanatory captions and possibly background music. Upload it to YouTube as part of the project. Video is played at the beginning of the presentation. (Video can be used to promote the course on LinkedIn.)
-
-## Help
-
-* **Never, ever** use `rising_edge` or `falling_edge` to test edges of non-clock signals under any circumstances!
-
-* Use hierarchical design, ie. instances, top-level, several files, etc.
-
-* Use synchronous entities with rising `clk`.
-
-* In a synchronous process, the first thing to do is the test of clock edge, then synchronous reset. The only exception is asynchronous operations (try to avoid them).
-
-* Use only input `in` or output `out` ports and not ~~inout~~.
-
-* Use `wait` statements [only in simulations](https://www.vhdl-online.de/courses/system_design/vhdl_language_and_syntax/sequential_statements/wait_statement).
-
-* Except Vivado, we encourage the use of other tools as well:
-   * [EDA Playground](https://www.edaplayground.com/)
-   * [TerosHDL](https://github.com/tomas-fryza/vhdl-course/wiki/How-to-install-TerosHDL-on-Windows-and-Linux)
-   * [ghdl + GtkWave](https://github.com/tomas-fryza/vhdl-course/wiki/How-to-install-ghdl-on-Windows-and-Linux)
-   * [ModelSim](https://www.intel.com/content/www/us/en/software-kit/750666/modelsim-intel-fpgas-standard-edition-software-version-20-1-1.html)
-   * [Live Share](https://code.visualstudio.com/learn/collaboration/live-share), a Visual Studio Code plugin for a real-time collaborative development
-   * [other tools](https://github.com/tomas-fryza/vhdl-course/wiki)
-
-# Recommended README.md file structure
-
-### Team members
-
-* Member 1 (responsible for ...)
-* Member 2 (responsible for ...)
-* Member 3 (responsible for ...)
-* Member 4 (responsible for ...)
-
-### Abstract
-
-An abstract is a short summary of your project, usually about a paragraph (6-7 sentences, 150-250 words) long. A well-written abstract serves multiple purposes: (a) an abstract lets readers get the gist or essence of your project quickly; (b) an abstract prepares readers to follow the detailed information, description, and results in your report; (c) and, later, an abstract helps readers remember key points from your project.
-
-The main contributions of the project are:
-
-* ...
-* ...
-* ...
-
-[Photo of your application with labels of individual parts.]
-
-[Link to your short video presentation.]
-
-## Theoretical description and explanation
-
-Enter a description of the problem and how to solve it.
-
-## Hardware description of demo application
-
-Insert descriptive text and schematic(s) of your implementation.
-
-## Software description
-
-Put flowchats/state diagrams of your algorithm(s) and direct links to source/testbench files in `src` and `sim` folders. Put a descriptive top-level schematic of your application.
-
-### Component(s) simulations
-
-Write descriptive text and put simulation screenshots of your components.
-
-## References
-
-1. Put here all references to sources and tools you used.
-2. ...
