@@ -205,27 +205,26 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
 ## Part 4: Top level VHDL code
 
-1. Create a VHDL design source named `top_level` and implement a button-triggered UART transmitter on the Nexys A7 board according to the following structure. Use switches `SW[7:0]` to specify the ASCII codes of transmitted data.
+1. Create a VHDL design source named `top_level`. Implement a button-triggered UART transmitter on the Nexys A7 board to send data to your computer via the serial line. The transmitted data will be specified using the 8 switches `SW[7:0]` to input ASCII codes, which you can look up on this [ASCII code chart](https://www.ascii-code.com/).
 
    ![top level](images/top-level_ver1.png)
 
-   > **Note:** The `clock_enable` component from the previous lab(s) is required. Do not forget to copy both files to `YOUR-PROJECT-FOLDER/uart.srcs/sources_1/new/` folder and add them to the project or use **Copy scripts to project** checkbox while adding design source files in Vivado.
-   >
-   > **Note:** Your transmitter signal `tx` must be connected to onboard FTDI FT2232HQ USB-UART bridge receiver, ie. use pin number `D4` which is maped in XDC template to `UART_RXD_OUT` (see [Nexys A7 reference manual, section 6](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual?redirect=1)).
-   >
-   > **Note:** Use online template for your [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t` and uncomment the used pins according to the top_level entity.
+   > **Notes:**
+   > * The `clock_enable` component from the previous lab(s) is required. Do not forget to copy both files to `YOUR-PROJECT-FOLDER/uart.srcs/sources_1/new/` folder and add them to the project or use **Copy scripts to project** checkbox while adding design source files in Vivado.
+   > * Your transmitter signal `tx` must be connected to onboard FTDI FT2232HQ USB-UART bridge receiver, ie. use pin number `D4` which is maped in XDC template to `UART_RXD_OUT` (see [Nexys A7 reference manual, section 6](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual?redirect=1)).
+   
+2. Use online template for your [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t` and uncomment the used pins according to the top_level entity.
 
-2. Run Putty or any other serial monitor application, set **Connection type** to `Serial`, set your **Serial line**, **Speed**, and **Open** the communication.
+3. Run Putty or any other serial monitor application. Set the **Connection type** to `Serial`, specify your **Serial line** (e.g., COM3), set the **Speed** (or Baud Rate), and then click the **Open** button to initiate the communication.
 
    ![putty1](images/screenshot_putty_type.png)
    ![putty2](images/screenshot_putty_config.png)
-
 
 <a name="challenges"></a>
 
 ## Challenges
 
-A positive **edge detector** generates a single clock pulse when the input signal transitions from low to high, while a negative edge detector generates a pulse when the input transitions from high to low. The VHDL code captures these transitions by comparing the current signal state with the previous one using `and` and `not` gates, outputting single clock pulses accordingly.
+A positive **edge detector** generates a single clock pulse when the input signal transitions from low to high (rising edge). In contrast, a negative edge detector generates a pulse when the input signal transitions from high to low (falling edge). The VHDL code detects these transitions by comparing the current state of the signal with its previous state using `and` and `not` gates. Based on the comparison, the code outputs a single clock pulse whenever the appropriate transition occurs.
 
 ![edge detector](images/wavedrom_edge-detector.png)
 
@@ -244,13 +243,12 @@ https://wavedrom.com/
 }
 -->
 
-1. Create a new source file with I/O port from figure above and implement an `edge_detector` component. Use this component in your `top_level` to start the UART transmission.
+1. Create a new source file that includes the I/O ports as shown in the figure above. Implement an `edge_detector` component in this file. Then, use the `edge_detector` component in your `top_level` design to trigger the UART transmission.
 
     ```vhdl
     ...
 
     architecture behavioral of edge_detector is
-        -- Remember previous button value
         signal sig_delayed : std_logic;
 
     begin
@@ -264,7 +262,8 @@ https://wavedrom.com/
         end process p_edge_detector;
 
         -- Assign output signals for edge detector
-
+        pos_edge <=
+        neg_edge <=
 
     end architecture behavioral;
     ```
