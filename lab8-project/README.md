@@ -1,11 +1,16 @@
 # VHDL project
 
-### Some examples of previous projects
+### Topics 2024/25
 
-* [Tone generator](https://github.com/VojtaKudela/BPC-DE1-topic_4/blob/main/README.md)
-* [PWM servo](https://github.com/Th0rgrlm/Topic3-PWM-Based-Servo-Motor-Controller/blob/main/README.md)
-* [Ultrasonic parking spot detection](https://github.com/247828/BPC-DE1-Project/blob/main/README.md)
-* [VGA](https://github.com/deved9/DE1-project)
+1. Digital clock with alarm and stopwatch or Digital scoreboard with timer for your preferred sport
+2. Complete UART Tx/Rx controller with configurable frame structure and baudrate and FIFO buffer
+3. Configurable multi-channel Pulse Width Modulation (PWM) for LED brightness control or Servo motor(s) controller
+4. Ultrasound sensor(s) controller
+
+Advanced:
+1. Usage of ADC (Analog-to-digital converter), signal filtration
+2. Custom I2C controller design and demo of I2C communication
+3. Custom SPI controller design and demo of SPI communication
 
 ## Instructions
 
@@ -100,6 +105,13 @@ Write descriptive text and put simulation screenshots of components you created 
 2. ...
 
 ### Topics 2023/24
+
+### Some examples of previous projects
+
+* [Tone generator](https://github.com/VojtaKudela/BPC-DE1-topic_4/blob/main/README.md)
+* [PWM servo](https://github.com/Th0rgrlm/Topic3-PWM-Based-Servo-Motor-Controller/blob/main/README.md)
+* [Ultrasonic parking spot detection](https://github.com/247828/BPC-DE1-Project/blob/main/README.md)
+* [VGA](https://github.com/deved9/DE1-project)
 
 **Topic 1: Smart Parking System with Ultrasonic Sensors**
 
