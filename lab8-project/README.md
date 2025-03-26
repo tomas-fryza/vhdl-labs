@@ -4,8 +4,8 @@
 
 1. Digital clock with alarm and stopwatch or Digital scoreboard with timer for your preferred sport
 2. Complete UART Tx/Rx controller with configurable frame structure and baudrate and FIFO buffer
-3. Configurable multi-channel Pulse Width Modulation (PWM) for LED brightness control or Servo motor(s) controller
-4. Ultrasound sensor(s) controller
+3. Configurable multi-channel Pulse Width Modulation (PWM) for LED brightness control or Servo motor(s) controller (SG90)
+4. Ultrasound sensor(s) controller (HS-SR04)
 
 Advanced:
 1. Usage of ADC (Analog-to-digital converter), signal filtration
