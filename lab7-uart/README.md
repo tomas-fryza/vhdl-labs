@@ -215,7 +215,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
    
 2. Use online template for your [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t` and uncomment the used pins according to the top_level entity.
 
-3. Run Putty or any other serial monitor application. Set the **Connection type** to `Serial`, specify your **Serial line** (e.g., COM3), set the **Speed** (or Baud Rate), and then click the **Open** button to initiate the communication.
+3. Run Putty or any other serial monitor application (such as [web application](https://hhdsoftware.com/online-serial-port-monitor)). Set the **Connection type** to `Serial`, specify your **Serial line** (e.g., COM3), set the **Speed** (or Baud Rate), and then click the **Open** button to initiate the communication.
 
    ![putty1](images/screenshot_putty_type.png)
    ![putty2](images/screenshot_putty_config.png)
