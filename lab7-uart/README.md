@@ -141,12 +141,18 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
                     -- Reset sig_count to 0 and tx_done to 0
 
-                elsif (state = IDLE and tx_start = '1') then
-                    state <= START;
-
                 elsif (baud_en = '1') then  -- Use clock enable signal
 
                     case state is
+
+                        when IDLE =>
+                            -- Keep Tx line to high
+
+                            -- Clear tx_done to 0
+
+                            if (tx_start = '1') then
+                                state <= START;
+                            end if;
 
                         when START =>
                             tx        <= '0';      -- Start bit (LOW)
@@ -170,11 +176,6 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                             -- Set tx_done to 1
 
                             -- Set next state to IDLE
-
-                        when IDLE =>
-                            -- Keep Tx line to high
-
-                            -- Clear tx_done to 0
 
                         when others =>
                             state <= IDLE;
