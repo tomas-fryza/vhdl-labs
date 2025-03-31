@@ -16,9 +16,10 @@ end entity top_level;
 architecture Behavioral of top_level is
     signal sig_baud : std_logic;
     signal sig_edge : std_logic;
+
     component clock_enable is
         generic (
-            n_periods : integer := 3
+            n_periods : integer
         );
         port (
             clk   : in    std_logic;
@@ -73,7 +74,7 @@ begin
         port map (
             clk      => CLK100MHZ,
             rst      => BTNC,
-            tx_start => BTNU,
+            tx_start => sig_edge,
             data_in  => SW,
             baud_en  => sig_baud,
             tx       => UART_RXD_OUT,
