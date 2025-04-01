@@ -14,9 +14,6 @@ entity top_level is
 end entity top_level;
 
 architecture Behavioral of top_level is
-    signal sig_baud : std_logic;
-    signal sig_edge : std_logic;
-
     component clock_enable is
         generic (
             n_periods : integer
@@ -25,15 +22,6 @@ architecture Behavioral of top_level is
             clk   : in    std_logic;
             rst   : in    std_logic;
             pulse : out   std_logic
-        );
-    end component;
-
-    component edge_detector is
-        port (
-            clk      : in    std_logic;
-            btn      : in    std_logic;
-            pos_edge : out   std_logic;
-            neg_edge : out   std_logic
         );
     end component;
 
@@ -49,9 +37,11 @@ architecture Behavioral of top_level is
         );
     end component;
 
+    signal sig_9600bd : std_logic;
+
 begin
 
-    BAUDRATE : component clock_enable
+    CLK_BAUD : component clock_enable
         generic map (
             n_periods => 10_417  -- baudrate = 9600
             -- n_periods => 868  -- baudrate = 115_200
@@ -59,24 +49,16 @@ begin
         port map (
             clk   => CLK100MHZ,
             rst   => BTNC,
-            pulse => sig_baud
-        );
-
-    EDGE : component edge_detector
-        port map (
-            clk      => CLK100MHZ,
-            btn      => BTNU,
-            pos_edge => sig_edge,
-            neg_edge => open
+            pulse => sig_9600bd
         );
 
     UART : component uart_tx
         port map (
             clk      => CLK100MHZ,
             rst      => BTNC,
-            tx_start => sig_edge,
+            tx_start => BTNU,
             data_in  => SW,
-            baud_en  => sig_baud,
+            baud_en  => sig_9600bd,
             tx       => UART_RXD_OUT,
             tx_done  => LED16_B
         );
