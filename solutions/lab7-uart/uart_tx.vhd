@@ -67,7 +67,7 @@ begin
                         end if;
 
                     when start_bit =>
-                        -- Start bit (LOW), Load data
+                        -- Start bit (LOW), Load data to transmit
                         tx        <= '0';
                         sig_reg   <= data_in;
                         sig_count <= 0;

@@ -260,11 +260,7 @@ A positive **edge detector** generates a single clock pulse when the input signa
 
 2. Move `clock_enable` instanciation to the `debounce` component.
 
-3. Instead of LEDs, use a Pmod port of the Nexys A7 board and display counter values on oscilloscope or logic analyser.
-
-   ![pmods](images/pmod_table.png)
-
-4. Use iterative `generate` statement from the [previous lab](https://github.com/tomas-fryza/vhdl-course/tree/master/lab6-lfsr#part3) and extend the instantiation of `debounce` component to several buttons.
+3. Use iterative `generate` statement from the [previous lab](https://github.com/tomas-fryza/vhdl-course/tree/master/lab6-lfsr#part3) and extend the instantiation of `debounce` component to several buttons.
 
 <a name="references"></a>
 

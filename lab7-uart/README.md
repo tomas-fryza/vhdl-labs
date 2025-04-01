@@ -116,8 +116,8 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
     ```vhdl
     architecture behavioral of uart_tx is
         -- FSM States
-        type   state_type is (IDLE, START, DATA, STOP);
-        signal state : state_type;
+        type   state_type is (IDLE, START_BIT, DATA, STOP_BIT);
+        signal state_tx : state_type;
 
         -- Transmission Registers
         signal sig_count : integer range 0 to 7;
@@ -143,7 +143,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
                 elsif (baud_en = '1') then  -- Use clock enable signal
 
-                    case state is
+                    case state_tx is
 
                         when IDLE =>
                             -- Keep Tx line to high
@@ -151,26 +151,27 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                             -- Clear tx_done to 0
 
                             if (tx_start = '1') then
-                                state <= START;
+                                state_tx <= START_BIT;
                             end if;
 
-                        when START =>
-                            tx        <= '0';      -- Start bit (LOW)
-                            sig_reg   <= data_in;  -- Load data
+                        when START_BIT =>
+                            -- Start bit (LOW), Load data to transmit
+                            tx        <= '0';
+                            sig_reg   <= data_in;
                             sig_count <= 0;
                             tx_done   <= '0';
-                            state     <= DATA;
+                            state_tx  <= DATA;
 
                         when DATA =>
                             tx      <=  -- Transmit LSB first
                             sig_reg <=  -- Shift register to right
                             if (sig_count = 7) then
-                                state <= STOP;
+                                state_tx <= STOP_BIT;
                             else
                                 sig_count <= sig_count + 1;
                             end if;
 
-                        when STOP =>
+                        when STOP_BIT =>
                             -- Set Tx stop bit (HIGH)
 
                             -- Set tx_done to 1
@@ -178,7 +179,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                             -- Set next state to IDLE
 
                         when others =>
-                            state <= IDLE;
+                            state_tx <= IDLE;
 
                     end case;
 
@@ -196,7 +197,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
    > **Note:** To display internal signal values, follow these steps:
    > 1. Select `dut` in the **Scope** folder.
-   > 2. Right-click on the `state` signal name in the **Objects** folder.
+   > 2. Right-click on the `state_tx` signal name in the **Objects** folder.
    > 3. Add this signal by selecting the **Add to Wave Window** command.
    > 4. Click on the **Relaunch Simulation** icon.
    >
@@ -211,67 +212,31 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
    ![top level](images/top-level_ver1.png)
 
    > **Notes:**
-   > * The `clock_enable` component from the previous lab(s) is required. Do not forget to copy both files to `YOUR-PROJECT-FOLDER/uart.srcs/sources_1/new/` folder and add them to the project or use **Copy scripts to project** checkbox while adding design source files in Vivado.
+   > * The `clock_enable` component from the previous lab(s) is required. Do not forget to copy both files to `YOUR-PROJECT-FOLDER/uart.srcs/sources_1/new/` folder and add them to the project or use **Copy scripts to project** checkbox while adding design source file in Vivado.
    > * Your transmitter signal `tx` must be connected to onboard FTDI FT2232HQ USB-UART bridge receiver, ie. use pin number `D4` which is maped in XDC template to `UART_RXD_OUT` (see [Nexys A7 reference manual, section 6](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual?redirect=1)).
    
-2. Use online template for your [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t` and uncomment the used pins according to the top_level entity.
+2. Use online template for your [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t` and uncomment the used pins according to the `top_level` entity.
 
-3. Run Putty or any other serial monitor application (such as [web application](https://hhdsoftware.com/online-serial-port-monitor)). Set the **Connection type** to `Serial`, specify your **Serial line** (e.g., COM3), set the **Speed** (or Baud Rate), and then click the **Open** button to initiate the communication.
+3. Run Putty or any other serial monitor application or [web application](https://hhdsoftware.com/online-serial-port-monitor). Set the **Connection type** to `Serial`, specify your **Serial line** (e.g., COM3), set the **Speed** (or Baud Rate), and then click the **Open** button to initiate the communication. Clicking the Up button on the board will transmit the user data selected by the switches.
 
    ![putty1](images/screenshot_putty_type.png)
-   ![putty2](images/screenshot_putty_config.png)
+<!--   ![putty2](images/screenshot_putty_config.png)-->
 
 <a name="challenges"></a>
 
 ## Challenges
 
-A positive **edge detector** generates a single clock pulse when the input signal transitions from low to high (rising edge). In contrast, a negative edge detector generates a pulse when the input signal transitions from high to low (falling edge). The VHDL code detects these transitions by comparing the current state of the signal with its previous state using `and` and `not` gates. Based on the comparison, the code outputs a single clock pulse whenever the appropriate transition occurs.
+1. In the `*.xdc` constraints file, remap the UART outputs to any Pmod port on the Nexys A7 board, and display the UART values on an oscilloscope or logic analyzer.
 
-![edge detector](images/wavedrom_edge-detector.png)
+   ![pmods](images/pmod_table.png)
 
-<!--
-https://wavedrom.com/
+2. Connect the logic analyzer to your Pmod pins, including GND. Launch the **Logic** analyzer software and start the capture. The Saleae Logic software offers a decoding feature to transform the captured signals into meaningful UART messages. Click the **+ button** in the **Analyzers** section and set up the **Async Serial** decoder.
 
-{
-  signal: [
-    {name: "clk",         wave: 'P.................'},
-    {name: "btn",         wave: 'l...h.......l.....'},
-    {name: "sig_delayed", wave: 'l....h.......l....'},
-    {},
-    {name: "pos_edge",    wave: 'l...hl............'},
-    {name: "neg_edge",    wave: 'l...........hl....'},
-  ],
-}
--->
+   ![Logic analyzer -- Paris](images/analyzer_paris.png)
 
-1. Create a new source file that includes the I/O ports as shown in the figure above. Implement an `edge_detector` component in this file. Then, use the `edge_detector` component in your `top_level` design to trigger the UART transmission.
-
-    ```vhdl
-    ...
-
-    architecture behavioral of edge_detector is
-        signal sig_delayed : std_logic;
-
-    begin
-        -- Remember the previous value of a signal and generates single
-        -- clock pulses for positive and negative edges of the signal.
-        p_edge_detector : process (clk) is
-        begin
-            if rising_edge(clk) then
-                sig_delayed <= btn;
-            end if;
-        end process p_edge_detector;
-
-        -- Assign output signals for edge detector
-        pos_edge <=
-        neg_edge <=
-
-    end architecture behavioral;
-    ```
-
-   ![top level](images/top-level_ver2.png)
-
-   > **Note:** Use reserved keyword `open` when you instantiate a module that has an output that is not needed.
+   > **Note:** To perform this analysis, you will need a logic analyzer such as [Saleae](https://www.saleae.com/) or [similar](https://www.amazon.com/KeeYees-Analyzer-Device-Channel-Arduino/dp/B07K6HXDH1/ref=sr_1_6?keywords=saleae+logic+analyzer&qid=1667214875&qu=eyJxc2MiOiI0LjIyIiwicXNhIjoiMy45NSIsInFzcCI6IjMuMDMifQ%3D%3D&sprefix=saleae+%2Caps%2C169&sr=8-6) device. Additionally, you should download and install the [Saleae Logic 1](https://support.saleae.com/logic-software/legacy-software/older-software-releases#logic-1-x-download-links) or [Saleae Logic 2](https://www.saleae.com/downloads/) software on your computer.
+   >
+   > You can find a comprehensive tutorial on utilizing logic analyzer in this [video](https://www.youtube.com/watch?v=CE4-T53Bhu0).
 
 <a name="references"></a>
 
