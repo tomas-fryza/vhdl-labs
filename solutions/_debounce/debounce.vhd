@@ -1,72 +1,76 @@
---------------------------------------------------------------------------------
---
---   FileName:         debounce.vhd
---   Dependencies:     none
---   Design Software:  Quartus Prime Version 17.0.0 Build 595 SJ Lite Edition
---
---   HDL CODE IS PROVIDED "AS IS."  DIGI-KEY EXPRESSLY DISCLAIMS ANY
---   WARRANTY OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING BUT NOT
---   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
---   PARTICULAR PURPOSE, OR NON-INFRINGEMENT. IN NO EVENT SHALL DIGI-KEY
---   BE LIABLE FOR ANY INCIDENTAL, SPECIAL, INDIRECT OR CONSEQUENTIAL
---   DAMAGES, LOST PROFITS OR LOST DATA, HARM TO YOUR EQUIPMENT, COST OF
---   PROCUREMENT OF SUBSTITUTE GOODS, TECHNOLOGY OR SERVICES, ANY CLAIMS
---   BY THIRD PARTIES (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF),
---   ANY CLAIMS FOR INDEMNITY OR CONTRIBUTION, OR OTHER SIMILAR COSTS.
---
---   Version History
---   Version 2.0 6/28/2019 Scott Larson
---     Made stable time higher resolution and simpler to specify
---     Made stable time simpler to specify
---   Version 1.0 3/26/2012 Scott Larson
---     Initial Public Release
---
---------------------------------------------------------------------------------
+-- https://stackoverflow.com/questions/61630181/vhdl-button-debouncing-or-not-as-the-case-may-be
 
-LIBRARY ieee;
-    USE ieee.std_logic_1164.all;
+library ieee;
+  use ieee.std_logic_1164.all;
+  use ieee.numeric_std.all;
 
-ENTITY debounce IS
-    GENERIC (
-        clk_freq    : INTEGER := 100_000_000; -- system clock frequency in Hz
-        stable_time : INTEGER := 8            -- time button must remain stable in ms
-    );
-    PORT (
-        clk    : IN    STD_LOGIC; -- input clock
-        arst_n : IN    STD_LOGIC; -- asynchronous active low reset
-        button : IN    STD_LOGIC; -- input signal to be debounced
-        result : OUT   STD_LOGIC  -- debounced signal
-    );
-END entity debounce;
+entity debounce is
+  generic (
+    clock_period    : time     := 10 ns;
+    debounce_period : time     := 125 ms; -- 1/8th second as a rule of thumb for a tactile button/switch.
+    sync_bits       : positive := 2       -- Number of bits in the synchronisation buffer (2 minimum).
+  );
+  port (
+    clock  : in    std_logic;
+    input  : in    std_logic;        -- Asynchronous and noisy input.
+    output : out   std_logic := '0'; -- Synchronised, debounced and filtered output.
+    edge   : out   std_logic := '0'; -- Goes high for 1 clock cycle on either edge of synchronised and debounced input.
+    rise   : out   std_logic := '0'; -- Goes high for 1 clock cycle on the rising edge of synchronised and debounced input.
+    fall   : out   std_logic := '0'  -- Goes high for 1 clock cycle on the falling edge of synchronised and debounced input.
+  );
+end entity debounce;
 
-ARCHITECTURE logic OF debounce IS
-    SIGNAL flipflops   : STD_LOGIC_VECTOR(1 DOWNTO 0); -- input flip flops
-    SIGNAL counter_set : STD_LOGIC;                    -- sync reset to zero
-BEGIN
+architecture v1 of debounce is
 
-    counter_set <= flipflops(0) xor flipflops(1); -- determine when to start/reset counter
+  constant sync_buffer_msb : positive                                   := sync_bits - 1;
+  signal   sync_buffer     : std_logic_vector(sync_buffer_msb downto 0) := (others => '0'); -- N-bit synchronisation buffer (2 bits minimum).
+  alias    sync_input      : std_logic is sync_buffer(sync_buffer_msb);                     -- The synchronised input is the MSB of the synchronisation buffer.
 
-    p_debounce : PROCESS (clk, arst_n) is
+  constant max_count  : natural                      := debounce_period / clock_period;
+  signal   counter    : natural range 0 to max_count := 0; -- Specify the range to reduce number of bits that are synthesised.
+  signal   sig_output : std_logic;
 
-        VARIABLE count : INTEGER RANGE 0 TO clk_freq * stable_time / 1000; -- counter for timing
+begin
 
-    BEGIN
+  assert SYNC_BITS >= 2
+    report "Need a minimum of 2 bits in the synchronisation buffer." severity error;
 
-        IF (arst_n = '0') THEN                                 -- reset
-            flipflops(1 DOWNTO 0) <= "00";                     -- clear input flipflops
-            result                <= '0';                      -- clear result register
-        ELSIF (clk'EVENT and clk = '1') THEN                   -- rising clock edge
-            flipflops(0) <= button;                            -- store button value in 1st flipflop
-            flipflops(1) <= flipflops(0);                      -- store 1st flipflop value in 2nd flipflop
-            IF (counter_set = '1') THEN                        -- reset counter because input is changing
-                count := 0;                                    -- clear the counter
-            ELSIF (count < clk_freq * stable_time / 1000) THEN -- stable input time is not yet met
-                count := count + 1;                            -- increment counter
-            ELSE                                               -- stable input time is met
-                result <= flipflops(1);                        -- output the stable value
-            END IF;
-        END IF;
+  process (clock) is
 
-    END PROCESS p_debounce;
+    variable edge_internal : std_logic := '0';
+    variable rise_internal : std_logic := '0';
+    variable fall_internal : std_logic := '0';
 
-END architecture logic;
+  begin
+
+    if rising_edge(clock) then
+      -- Synchronise the asynchronous input.
+      -- MSB of sync_buffer is the synchronised input.
+      sync_buffer <= sync_buffer(sync_buffer_msb - 1 downto 0) & input;
+
+      edge <= '0';                                                         -- Goes high for 1 clock cycle on either edge.
+      rise <= '0';                                                         -- Goes high for 1 clock cycle on the rising edge.
+      fall <= '0';                                                         -- Goes high for 1 clock cycle on the falling edge.
+
+      if (counter = max_count - 1) then                                    -- If successfully debounced, notify what happened, and reset the counter.
+        sig_output <= sync_input;
+        edge       <= edge_internal;                                       -- Goes high for 1 clock cycle on either edge.
+        rise       <= rise_internal;                                       -- Goes high for 1 clock cycle on the rising edge.
+        fall       <= fall_internal;                                       -- Goes high for 1 clock cycle on the falling edge.
+        counter    <= 0;
+      elsif (sync_input /= sig_output) then
+        counter <= counter + 1;
+      else
+        counter <= 0;
+      end if;
+    end if;
+
+    -- Edge detection.
+    edge_internal := sync_input xor sig_output;
+    rise_internal := sync_input and not sig_output;
+    fall_internal := not sync_input and sig_output;
+    output        <= sig_output;
+
+  end process;
+
+end architecture v1;
