@@ -13,7 +13,7 @@ architecture tb of tb_alu_4bit is
         port (
             a      : in    std_logic_vector(3 downto 0);
             b      : in    std_logic_vector(3 downto 0);
-            opcode : in    std_logic_vector(2 downto 0);
+            oper   : in    std_logic_vector(2 downto 0);
             result : out   std_logic_vector(3 downto 0);
             carry  : out   std_logic;
             zero   : out   std_logic
@@ -22,7 +22,7 @@ architecture tb of tb_alu_4bit is
 
     signal a      : std_logic_vector(3 downto 0);
     signal b      : std_logic_vector(3 downto 0);
-    signal opcode : std_logic_vector(2 downto 0);
+    signal oper   : std_logic_vector(2 downto 0);
     signal result : std_logic_vector(3 downto 0);
     signal carry  : std_logic;
     signal zero   : std_logic;
@@ -32,7 +32,7 @@ begin
         port map (
             a      => a,
             b      => b,
-            opcode => opcode,
+            oper   => oper,
             result => result,
             carry  => carry,
             zero   => zero
@@ -46,19 +46,19 @@ begin
         b <= x"7";
 
         -- NOT
-        opcode <= "000"; wait for 100 ns;
+        oper <= "000"; wait for 100 ns;
         -- ADD
-        opcode <= "001"; wait for 100 ns;
+        oper <= "001"; wait for 100 ns;
         -- SUB
-        opcode <= "010"; wait for 100 ns;
+        oper <= "010"; wait for 100 ns;
         -- MUL 2
-        opcode <= "011"; wait for 100 ns;
+        oper <= "011"; wait for 100 ns;
         -- DIV 2
-        opcode <= "100"; wait for 100 ns;
+        oper <= "100"; wait for 100 ns;
         -- INC
-        opcode <= "101"; wait for 100 ns;
+        oper <= "101"; wait for 100 ns;
         -- DEC
-        opcode <= "110"; wait for 100 ns;
+        oper <= "110"; wait for 100 ns;
 
         report "==== STOP ====";
         wait;

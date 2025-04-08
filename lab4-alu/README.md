@@ -48,13 +48,15 @@ extended <= '0' & a;  -- Result: "01010"
 
 ## Part 2: Arithmetic Logic Unit (ALU)
 
-An **Arithmetic Logic Unit (ALU)** is a fundamental component of digital systems, responsible for performing arithmetic and logical operations on binary data. Typically integrated within a microprocessor or a digital signal processor, the ALU executes operations such as addition, subtraction, multiplication, and bitwise functions like AND, OR, XOR, and NOT. It also handles shift operations, which move bits left or right to perform efficient multiplication or division by powers of two. The ALU’s design includes an input section that accepts binary operands, a control unit that selects the specific operation based on control signals (`opcode`), and an output section that provides the result.
+An **Arithmetic Logic Unit (ALU)** is a fundamental component of digital systems, responsible for performing arithmetic and logical operations on binary data. Typically integrated within a microprocessor or a digital signal processor, the ALU executes operations such as addition, subtraction, multiplication, and bitwise functions like AND, OR, XOR, and NOT. It also handles shift operations, which move bits left or right to perform efficient multiplication or division by powers of two. The ALU’s design includes an input section that accepts binary operands, a control unit that selects the specific operation based on control signals, and an output section that provides the result.
 
 More complicated ALUs may handle 64-bit numbers and have many more functions than mentioned above. The ALU that will be discussed here will only be able to perform basic operations on 4-bit numbers.
 
 Additionally, it generates various **status flags**—such as carry, zero, overflow, and negative—which indicate specific conditions resulting from the operation, aiding in decision-making processes within the processor. 
 
-An **opcode** (short for operation code) is a part of a machine language instruction that specifies the operation to be performed by the CPU. It is a binary code that tells the processor which type of action to execute, such as arithmetic operations (addition, subtraction), logical operations (AND, OR, XOR), data movement (load, store), or control flow instructions (jump, branch). Note, that the opcode is typically combined with other parts of the instruction, such as operands (which indicate the data or memory addresses to use), to form a complete machine instruction.
+An **opcode** (short for operation code) is a part of a machine language instruction that specifies the operation to be performed by the ALU. It is a binary code that tells the processor which type of action to execute, such as arithmetic operations (addition, subtraction), logical operations (AND, OR, XOR), data movement (load, store), or control flow instructions (jump, branch). Note, that the opcode is typically combined with other parts of the instruction, such as operands (which indicate the data or memory addresses to use), to form a complete machine instruction.
+
+   ![alu symbol](images/alu-symbol.png)
 
 1. Propose a table with a simplified instruction format for the fundamental arithmetic and logical operations that your ALU might support.
 
@@ -84,7 +86,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
       | :-: | :-: | :-- | :-- |
       | `a` | input | `std_logic_vector(3 downto 0)` | 4-bit inputs |
       | `b` | input | `std_logic_vector(3 downto 0)` |  |
-      | `opcode` | input | `std_logic_vector(2 downto 0)` | Operation selector |
+      | `oper` | input | `std_logic_vector(2 downto 0)` | ALU operation |
       | `result` | output | `std_logic_vector(3 downto 0)` | 4-bit output |
       | `carry` | output | `std_logic` | Carry out flag |
       | `zero` | output | `std_logic` | Zero flag |
@@ -101,9 +103,9 @@ An **opcode** (short for operation code) is a part of a machine language instruc
        signal sig_res : std_logic_vector(4 downto 0);  -- Extra bit for carry
    begin
 
-       p_alu : process (a, b, opcode) is
+       p_alu : process (a, b, oper) is
        begin
-           case opcode is
+           case oper is
                when "000" =>  -- NOT
                    sig_res <= '0' & not a;
 
@@ -152,7 +154,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
    | :-: | :-: | :-- | :-- |
    | `SW_A` | in  | `std_logic_vector(3 downto 0)` | First operand |
    | `SW_B` | in  | `std_logic_vector(3 downto 0)` | Second operand |
-   | `SW_OPCODE` | in  | `std_logic_vector(2 downto 0)` | Operation selector |
+   | `SW_OPER` | in  | `std_logic_vector(2 downto 0)` | ALU operation selector |
    | `LED_RESULT` | out | `std_logic_vector(3 downto 0)` | Show result |
    | `LED_RED` | out | `std_logic` | Show output carry flag |
    | `LED_BLUE` | out | `std_logic` | Show zero flag |

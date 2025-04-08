@@ -20,7 +20,7 @@ entity top_level is
     port (
         SW_A       : in    std_logic_vector(3 downto 0); --! First operand A
         SW_B       : in    std_logic_vector(3 downto 0); --! Second operand B
-        SW_OPCODE  : in    std_logic_vector(2 downto 0); --! Operation selector
+        SW_OPER    : in    std_logic_vector(2 downto 0); --! ALU operation selector
         LED_RESULT : out   std_logic_vector(3 downto 0); --! Show result
         LED_RED    : out   std_logic;                    --! Show output carry flag
         LED_BLUE   : out   std_logic;                    --! Show zero flag
@@ -44,7 +44,7 @@ architecture behavioral of top_level is
         port (
             a      : in    std_logic_vector(3 downto 0);
             b      : in    std_logic_vector(3 downto 0);
-            opcode : in    std_logic_vector(2 downto 0);
+            oper   : in    std_logic_vector(2 downto 0);
             result : out   std_logic_vector(3 downto 0);
             carry  : out   std_logic;
             zero   : out   std_logic
@@ -69,7 +69,7 @@ begin
         port map (
             a      => SW_A,
             b      => SW_B,
-            opcode => SW_OPCODE,
+            oper   => SW_OPER,
             result => sig_tmp,
             carry  => LED_RED,
             zero   => LED_BLUE

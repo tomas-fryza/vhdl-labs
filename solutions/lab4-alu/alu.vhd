@@ -20,7 +20,7 @@ entity alu_4bit is
     port (
         a      : in    std_logic_vector(3 downto 0); --! 4-bit inputs
         b      : in    std_logic_vector(3 downto 0);
-        opcode : in    std_logic_vector(2 downto 0); --! Operation selector
+        oper   : in    std_logic_vector(2 downto 0); --! ALU operation selector
         result : out   std_logic_vector(3 downto 0); --! 4-bit output
         carry  : out   std_logic;                    --! Carry out flag
         zero   : out   std_logic                     --! Zero flag
@@ -33,10 +33,10 @@ architecture behavioral of alu_4bit is
     signal sig_res : std_logic_vector(4 downto 0);  -- Extra bit for carry
 begin
 
-    p_alu : process (a, b, opcode) is
+    p_alu : process (a, b, oper) is
     begin
 
-        case opcode is
+        case oper is
 
             when "000" =>  -- NOT A
                 sig_res <= '0' & not a;
@@ -74,8 +74,8 @@ begin
 
     -- Assign outputs
     result <= sig_res(3 downto 0);
-    carry  <= sig_res(4);  -- Carry bit
+    carry  <= sig_res(4); -- Carry bit
     zero   <= '1' when sig_res(3 downto 0) = "0000" else
-              '0';         -- Zero flag
+              '0';        -- Zero flag
 
 end architecture behavioral;
