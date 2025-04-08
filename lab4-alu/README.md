@@ -56,8 +56,6 @@ Additionally, it generates various **status flags**—such as carry, zero, overf
 
 An **opcode** (short for operation code) is a part of a machine language instruction that specifies the operation to be performed by the ALU. It is a binary code that tells the processor which type of action to execute, such as arithmetic operations (addition, subtraction), logical operations (AND, OR, XOR), data movement (load, store), or control flow instructions (jump, branch). Note, that the opcode is typically combined with other parts of the instruction, such as operands (which indicate the data or memory addresses to use), to form a complete machine instruction.
 
-   ![alu symbol](images/alu-symbol.png)
-
 1. Propose a table with a simplified instruction format for the fundamental arithmetic and logical operations that your ALU might support.
 
    | **Opcode** | **Operation** | **Description** |
@@ -81,6 +79,8 @@ An **opcode** (short for operation code) is a part of a machine language instruc
    6. Choose a default board: `Nexys A7-50T`
    7. Click **Finish** to create the project
    8. Define I/O ports of new module:
+
+   ![alu symbol](images/alu-symbol.png)
 
       | **Port name** | **Direction** | **Type** | **Description** |
       | :-: | :-: | :-- | :-- |
