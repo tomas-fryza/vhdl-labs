@@ -41,31 +41,29 @@ architecture behavioral of uart_tx is
     constant N_PERIODS : integer := (CLK_FREQ / BAUDRATE);
 
     signal bits    : integer range 0 to 7;
-    signal periods : integer range 0 to N_PERIODS-1;
+    signal periods : integer range 0 to N_PERIODS - 1;
     signal reg     : std_logic_vector(7 downto 0);
-    
-begin
 
+begin
     -- UART Transmitter FSM
     p_transmitter : process (clk) is
     begin
-
         if rising_edge(clk) then
             if (rst = '1') then
-                tx            <= '1';
-                tx_done       <= '0';
-                state         <= IDLE;
+                tx      <= '1';
+                tx_done <= '0';
+                state   <= IDLE;
 
             else
                 case state is
 
                     when IDLE =>
-                        tx            <= '1';
-                        tx_done       <= '0';
+                        tx      <= '1';
+                        tx_done <= '0';
 
                         if (tx_start = '1') then
                             periods <= 0;
-                            state     <= START_BIT;
+                            state   <= START_BIT;
                         end if;
 
                     when START_BIT =>
@@ -74,7 +72,7 @@ begin
                         bits <= 0;
 
                         -- Make bit period according to baudrate
-                        if (periods = N_PERIODS-1) then
+                        if (periods = N_PERIODS - 1) then
                             state   <= DATA;
                             periods <= 0;
                         else
@@ -85,7 +83,7 @@ begin
                         -- Transmit LSB, Shift right
                         tx <= reg(0);
 
-                        if (periods = N_PERIODS-1) then
+                        if (periods = N_PERIODS - 1) then
                             reg     <= '0' & reg(7 downto 1);
                             periods <= 0;
 
@@ -99,10 +97,10 @@ begin
                         end if;
 
                     when STOP_BIT =>
-                        tx       <= '1';
-                        tx_done  <= '1';
+                        tx      <= '1';
+                        tx_done <= '1';
 
-                        if (periods = N_PERIODS-1) then
+                        if (periods = N_PERIODS - 1) then
                             state <= IDLE;
                         else
                             periods <= periods + 1;
@@ -112,10 +110,8 @@ begin
                         state <= IDLE;
 
                 end case;
-
             end if;
         end if;
-
     end process p_transmitter;
 
 end architecture behavioral;
