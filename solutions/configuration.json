@@ -1,31 +1,95 @@
 {
   "rule" : {
     "global": {
-      "indentSize": 4
-    },
-    "instantiation_034": {
-      "method": "component"
-    },
-    "process_029": {
-      "clock": "edge"
+      "case": "lower",
+      "indent_size": 4
     },
     "architecture_015": {
       "style": "no_blank_line"
     },
-    "architecture_016": {
+    "architecture_017": {
       "style": "no_blank_line"
+    },
+    "architecture_018": {
+      "disable": "True"
+    },
+    "case_007": {
+      "disable": "True"
+    },
+    "case_010": {
+      "disable": "True"
     },
     "case_200": {
       "style": "no_blank_line"
     },
     "component_003": {
+      "disable": "True"
+    },
+    "constant_004": {
+      "case": "upper"
+    },
+    "generic_007": {
+      "case": "upper"
+    },
+    "if_007": {
+      "disable": "True"
+    },
+    "if_010": {
+      "disable": "True"
+    },
+    "if_030": {
+      "disable": "True"
+    },
+    "if_031": {
+      "disable": "True"
+    },
+    "instantiation_004": {
+      "disable": "True"
+    },
+    "instantiation_034": {
+      "method": "component"
+    },
+    "loop_statement_200": {
+      "disable": "True"
+    },
+    "loop_statement_201": {
       "style": "no_blank_line"
+    },
+    "loop_statement_202": {
+      "style": "no_blank_line"
+    },
+    "process_011": {
+      "disable": "True"
+    },
+    "process_015": {
+      "disable": "True"
+    },
+    "process_022": {
+      "style": "no_blank_line"
+    },
+    "process_023": {
+      "disable": "True"
+    },
+    "process_026": {
+      "style": "no_blank_line"
+    },
+    "process_029": {
+      "clock": "edge"
+    },
+    "subprogram_body_204": {
+      "disable": "True"
     },
     "type_010": {
       "style": "no_blank_line"
     },
     "type_011": {
       "style": "no_blank_line"
+    },
+    "type_500": {
+      "case": "upper"
+    },
+    "variable_007": {
+      "disable": "True"
     }
   }
 }
