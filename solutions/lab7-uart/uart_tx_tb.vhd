@@ -5,11 +5,11 @@
 library ieee;
     use ieee.std_logic_1164.all;
 
-entity tb_uart_tx_8n1 is
-end entity tb_uart_tx_8n1;
+entity tb_uart_tx is
+end entity tb_uart_tx;
 
-architecture tb of tb_uart_tx_8n1 is
-    component uart_tx_8n1 is
+architecture tb of tb_uart_tx is
+    component uart_tx is
         port (
             clk      : in    std_logic;
             rst      : in    std_logic;
@@ -19,7 +19,7 @@ architecture tb of tb_uart_tx_8n1 is
             tx       : out   std_logic;
             tx_done  : out   std_logic
         );
-    end component uart_tx_8n1;
+    end component uart_tx;
 
     signal clk      : std_logic;
     signal rst      : std_logic;
@@ -34,7 +34,7 @@ architecture tb of tb_uart_tx_8n1 is
     signal   tbsimended : std_logic := '0';
 begin
 
-    dut : component uart_tx_8n1
+    dut : component uart_tx
         port map (
             clk      => clk,
             rst      => rst,

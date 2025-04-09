@@ -21,7 +21,7 @@ library ieee;
 
 -------------------------------------------------
 
-entity uart_tx_8n1 is
+entity uart_tx is
     port (
         clk      : in    std_logic;                    --! Main clock
         rst      : in    std_logic;                    --! High-active synchronous reset
@@ -31,11 +31,11 @@ entity uart_tx_8n1 is
         tx       : out   std_logic;                    --! UART Tx line
         tx_done  : out   std_logic                     --! Ready for transmission
     );
-end entity uart_tx_8n1;
+end entity uart_tx;
 
 -------------------------------------------------
 
-architecture behavioral of uart_tx_8n1 is
+architecture behavioral of uart_tx is
     -- FSM States
     type   state_type is (idle, start_bit, data, stop_bit);
     signal state_tx : state_type;
@@ -46,7 +46,7 @@ architecture behavioral of uart_tx_8n1 is
 begin
 
     -- UART Transmitter FSM
-    p_uart_tx_8n1 : process (clk) is
+    p_uart_tx : process (clk) is
     begin
 
         if rising_edge(clk) then
@@ -99,6 +99,6 @@ begin
             end if;
         end if;
 
-    end process p_uart_tx_8n1;
+    end process p_uart_tx;
 
 end architecture behavioral;

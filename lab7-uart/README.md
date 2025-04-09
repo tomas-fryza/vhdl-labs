@@ -95,7 +95,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
    1. Project name: `uart`
    2. Project location: your working folder, such as `Documents`
    3. Project type: **RTL Project**
-   4. Create a VHDL source file: `uart_tx_8n1`
+   4. Create a VHDL source file: `uart_tx`
    5. Do not add any constraints now
    6. Choose a default board: `Nexys A7-50T`
    7. Click **Finish** to create the project
@@ -114,7 +114,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 2. Define four states for the FSM and an internal counter in the architecture declaration section to count a sequence of data bits.
 
     ```vhdl
-    architecture behavioral of uart_tx_8n1 is
+    architecture behavioral of uart_tx is
         -- FSM States
         type   state_type is (IDLE, START_BIT, DATA, STOP_BIT);
         signal state_tx : state_type;
@@ -132,7 +132,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
     begin
 
         -- UART Transmitter FSM
-        p_uart_tx_8n1 : process (clk) is
+        p_uart_tx : process (clk) is
         begin
 
             if rising_edge(clk) then
@@ -186,14 +186,14 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                 end if;
             end if;
 
-        end process p_uart_tx_8n1;
+        end process p_uart_tx;
 
     end architecture behavioral;
     ```
 
 4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
-5. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `uart_tx_8n1_tb`, execute the simulation, and validate the functionality.
+5. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `uart_tx_tb`, execute the simulation, and validate the functionality.
 
    > **Note:** To display internal signal values, follow these steps:
    > 1. Select `dut` in the **Scope** folder.

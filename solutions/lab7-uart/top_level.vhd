@@ -25,7 +25,7 @@ architecture Behavioral of top_level is
         );
     end component;
 
-    component uart_tx_8n1 is
+    component uart_tx is
         port (
             clk      : in    std_logic;
             rst      : in    std_logic;
@@ -52,7 +52,7 @@ begin
             pulse => sig_9600bd
         );
 
-    UART : component uart_tx_8n1
+    UART : component uart_tx
         port map (
             clk      => CLK100MHZ,
             rst      => BTNC,

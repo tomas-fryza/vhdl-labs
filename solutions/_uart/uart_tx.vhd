@@ -1,0 +1,121 @@
+-------------------------------------------------
+--! @brief UART Transmitter
+--! @version 1.1
+--! @copyright (c) 2025 Tomas Fryza, MIT license
+--!
+--! This module implements a UART (Universal Asynchronous
+--! Receiver Transmitter) transmitter using a Finite State
+--! Machine (FSM) in 8N1 mode with variable baudrate.
+--!
+--! Developed using TerosHDL and Vivado 2020.2.
+--! Tested on Nexys A7-50T board and xc7a50ticsg324-1L FPGA.
+-------------------------------------------------
+
+library ieee;
+    use ieee.std_logic_1164.all;
+    use ieee.numeric_std.all;
+
+-------------------------------------------------
+
+entity uart_tx is
+    generic (
+        CLK_FREQ : integer := 100_000_000;
+        BAUDRATE : integer := 9_600
+    );
+    port (
+        clk      : in    std_logic;                    --! Main clock
+        rst      : in    std_logic;                    --! High-active synchronous reset
+        data_in  : in    std_logic_vector(7 downto 0); --! Data to transmit
+        tx_start : in    std_logic;                    --! Start transmission
+        tx       : out   std_logic;                    --! UART Tx line
+        tx_done  : out   std_logic                     --! Ready for transmission
+    );
+end entity uart_tx;
+
+-------------------------------------------------
+
+architecture behavioral of uart_tx is
+    type   state_type is (IDLE, START_BIT, DATA, STOP_BIT);
+    signal state : state_type;
+
+    constant N_PERIODS : integer := (CLK_FREQ / BAUDRATE);
+
+    signal bits    : integer range 0 to 7;
+    signal periods : integer range 0 to N_PERIODS-1;
+    signal reg     : std_logic_vector(7 downto 0);
+    
+begin
+
+    -- UART Transmitter FSM
+    p_transmitter : process (clk) is
+    begin
+
+        if rising_edge(clk) then
+            if (rst = '1') then
+                tx            <= '1';
+                tx_done       <= '0';
+                state         <= IDLE;
+
+            else
+                case state is
+
+                    when IDLE =>
+                        tx            <= '1';
+                        tx_done       <= '0';
+
+                        if (tx_start = '1') then
+                            periods <= 0;
+                            state     <= START_BIT;
+                        end if;
+
+                    when START_BIT =>
+                        tx   <= '0';
+                        reg  <= data_in;
+                        bits <= 0;
+
+                        -- Make bit period according to baudrate
+                        if (periods = N_PERIODS-1) then
+                            state   <= DATA;
+                            periods <= 0;
+                        else
+                            periods <= periods + 1;
+                        end if;
+
+                    when DATA =>
+                        -- Transmit LSB, Shift right
+                        tx <= reg(0);
+
+                        if (periods = N_PERIODS-1) then
+                            reg     <= '0' & reg(7 downto 1);
+                            periods <= 0;
+
+                            if (bits = 7) then
+                                state <= STOP_BIT;
+                            else
+                                bits <= bits + 1;
+                            end if;
+                        else
+                            periods <= periods + 1;
+                        end if;
+
+                    when STOP_BIT =>
+                        tx       <= '1';
+                        tx_done  <= '1';
+
+                        if (periods = N_PERIODS-1) then
+                            state <= IDLE;
+                        else
+                            periods <= periods + 1;
+                        end if;
+
+                    when others =>
+                        state <= IDLE;
+
+                end case;
+
+            end if;
+        end if;
+
+    end process p_transmitter;
+
+end architecture behavioral;
