@@ -14,7 +14,7 @@ entity top_level is
 end entity top_level;
 
 architecture Behavioral of top_level is
-    component clock_enable is
+    component clock_en is
         generic (
             n_periods : integer
         );
@@ -25,7 +25,7 @@ architecture Behavioral of top_level is
         );
     end component;
 
-    component uart_tx is
+    component uart_tx_8n1 is
         port (
             clk      : in    std_logic;
             rst      : in    std_logic;
@@ -41,7 +41,7 @@ architecture Behavioral of top_level is
 
 begin
 
-    CLK_BAUD : component clock_enable
+    CLK_BAUD : component clock_en
         generic map (
             n_periods => 10_417  -- baudrate = 9600
             -- n_periods => 868  -- baudrate = 115_200
@@ -52,7 +52,7 @@ begin
             pulse => sig_9600bd
         );
 
-    UART : component uart_tx
+    UART : component uart_tx_8n1
         port map (
             clk      => CLK100MHZ,
             rst      => BTNC,

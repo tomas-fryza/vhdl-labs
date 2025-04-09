@@ -23,7 +23,7 @@ library ieee;
 -- Entity declaration for clock enable
 ----------------------------------------------------------
 
-entity clock_enable is
+entity clock_en is
   generic (
     g_MAX : natural := 5 --! Number of clk pulses to generate one enable signal period
   );                       -- Note that there IS a semicolon between generic and port sections
@@ -32,13 +32,13 @@ entity clock_enable is
     rst : in    std_logic; --! High-active synchronous reset
     ce  : out   std_logic  --! Clock enable pulse signal
   );
-end entity clock_enable;
+end entity clock_en;
 
 ------------------------------------------------------------
 -- Architecture body for clock enable
 ------------------------------------------------------------
 
-architecture behavioral of clock_enable is
+architecture behavioral of clock_en is
 
   -- Local counter
   signal sig_cnt : natural;

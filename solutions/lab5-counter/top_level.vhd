@@ -40,7 +40,7 @@ end entity top_level;
 architecture behavioral of top_level is
 
   -- Component declaration for clock enable
-  component clock_enable is
+  component clock_en is
     generic (
       n_periods : integer
     );
@@ -49,10 +49,10 @@ architecture behavioral of top_level is
       rst   : in    std_logic;
       pulse : out   std_logic
     );
-  end component clock_enable;
+  end component clock_en;
 
   -- Component declaration for simple counter
-  component simple_counter is
+  component counter is
     generic (
       n_bits : integer
     );
@@ -62,7 +62,7 @@ architecture behavioral of top_level is
       en    : in    std_logic;
       count : out   std_logic_vector(NBIT - 1 downto 0)
     );
-  end component simple_counter;
+  end component counter;
 
   -- Component declaration for bin2seg
   component bin2seg is
@@ -83,7 +83,7 @@ architecture behavioral of top_level is
 begin
 
   -- Component instantiation of clock enable for 250 ms
-  clk_en0 : component clock_enable
+  clk_en0 : component clock_en
     generic map (
       n_periods => 25_000_000
     )
@@ -94,7 +94,7 @@ begin
     );
 
   -- Component instantiation of 4-bit simple counter
-  counter0 : component simple_counter
+  counter0 : component counter
     generic map (
       n_bits => 4
     )
@@ -126,7 +126,7 @@ begin
   AN <= b"1111_1110";
 
   -- Component instantiation of clock enable for 2 ms
-  clk_en1 : component clock_enable
+  clk_en1 : component clock_en
     generic map (
       n_periods => 200_000
     )
@@ -137,7 +137,7 @@ begin
     );
 
   -- Component instantiation of 16-bit simple counter
-  counter1 : component simple_counter
+  counter1 : component counter
     generic map (
       n_bits => 16
     )

@@ -176,7 +176,7 @@ Let an intersection contains two one-way streets with a fixed time control syste
     --------------------------------------------------------
     -- p_traffic_fsm:
     -- A sequential process with synchronous reset and
-    -- clock_enable entirely controls the sig_state signal
+    -- clock_en entirely controls the sig_state signal
     -- by CASE statement.
     --------------------------------------------------------
     p_traffic_fsm : process (clk) is

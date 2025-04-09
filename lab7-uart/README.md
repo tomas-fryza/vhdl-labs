@@ -95,7 +95,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
    1. Project name: `uart`
    2. Project location: your working folder, such as `Documents`
    3. Project type: **RTL Project**
-   4. Create a VHDL source file: `uart_tx`
+   4. Create a VHDL source file: `uart_tx_8n1`
    5. Do not add any constraints now
    6. Choose a default board: `Nexys A7-50T`
    7. Click **Finish** to create the project
@@ -114,7 +114,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 2. Define four states for the FSM and an internal counter in the architecture declaration section to count a sequence of data bits.
 
     ```vhdl
-    architecture behavioral of uart_tx is
+    architecture behavioral of uart_tx_8n1 is
         -- FSM States
         type   state_type is (IDLE, START_BIT, DATA, STOP_BIT);
         signal state_tx : state_type;
@@ -132,7 +132,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
     begin
 
         -- UART Transmitter FSM
-        p_uart_tx : process (clk) is
+        p_uart_tx_8n1 : process (clk) is
         begin
 
             if rising_edge(clk) then
@@ -186,14 +186,14 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                 end if;
             end if;
 
-        end process p_uart_tx;
+        end process p_uart_tx_8n1;
 
     end architecture behavioral;
     ```
 
 4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
-5. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `uart_tx_tb`, execute the simulation, and validate the functionality.
+5. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `uart_tx_8n1_tb`, execute the simulation, and validate the functionality.
 
    > **Note:** To display internal signal values, follow these steps:
    > 1. Select `dut` in the **Scope** folder.
@@ -212,10 +212,10 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
    ![top level](images/top-level_ver1.png)
 
    > **Notes:**
-   > * The `clock_enable` component from the previous lab(s) is required. Do not forget to copy both files to `YOUR-PROJECT-FOLDER/uart.srcs/sources_1/new/` folder and add them to the project or use **Copy scripts to project** checkbox while adding design source file in Vivado.
+   > * The `clock_en` component from the previous lab(s) is required. Do not forget to copy both files to `YOUR-PROJECT-FOLDER/uart.srcs/sources_1/new/` folder and add them to the project or use **Copy scripts to project** checkbox while adding design source file in Vivado.
    > * Your transmitter signal `tx` must be connected to onboard FTDI FT2232HQ USB-UART bridge receiver, ie. use pin number `D4` which is maped in XDC template to `UART_RXD_OUT` (see [Nexys A7 reference manual, section 6](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual?redirect=1)).
    
-2. Use online template for your [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t` and uncomment the used pins according to the `top_level` entity.
+2. Use online template for your [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys` and uncomment the used pins according to the `top_level` entity.
 
 3. Run Putty or any other serial monitor application or [web application](https://hhdsoftware.com/online-serial-port-monitor). Set the **Connection type** to `Serial`, specify your **Serial line** (e.g., COM3), set the **Speed** (or Baud Rate), and then click the **Open** button to initiate the communication. Clicking the Up button on the board will transmit the user data selected by the switches.
 

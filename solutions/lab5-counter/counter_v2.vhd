@@ -18,7 +18,7 @@ library ieee;
 
 -------------------------------------------------
 
-entity simple_counter is
+entity counter is
   generic (
     n_bits : integer := 3 --! Default number of counter bits
   );
@@ -28,11 +28,11 @@ entity simple_counter is
     en    : in    std_logic;                            --! Clock enable input
     count : out   std_logic_vector(n_bits - 1 downto 0) --! Counter value
   );
-end entity simple_counter;
+end entity counter;
 
 -------------------------------------------------
 
-architecture behavioral of simple_counter is
+architecture behavioral of counter is
 
   --! Local counter
   signal sig_count : std_logic_vector(n_bits - 1 downto 0);
@@ -41,7 +41,7 @@ begin
 
   --! Clocked process with synchronous reset which implements
   --! N-bit up counter.
-  p_simple_counter : process (clk) is
+  p_counter : process (clk) is
   begin
 
     if (rising_edge(clk)) then
@@ -57,7 +57,7 @@ begin
       end if;
     end if;
 
-  end process p_simple_counter;
+  end process p_counter;
 
   -- Assign internal register to output
   count <= sig_count;

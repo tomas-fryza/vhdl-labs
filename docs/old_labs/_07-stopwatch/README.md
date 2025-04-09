@@ -47,7 +47,7 @@ Perform the following steps to model the stopwatch counter.
 ## Part 3: Stopwatch simulation
 
 Perform the following steps to simulate stopwatch counter.
-   1. Create a VHDL simulation source `tb_stopwatch_seconds`, copy/paste the `testbench.vhd` code from EDA Playground example. Note that the maximum value of clock_enable circuit is set to 1 for the simulation, ie the stopwatch increments its value with a frequency of 100&nbsp;MHz and not 100&nbsp;Hz.
+   1. Create a VHDL simulation source `tb_stopwatch_seconds`, copy/paste the `testbench.vhd` code from EDA Playground example. Note that the maximum value of clock_en circuit is set to 1 for the simulation, ie the stopwatch increments its value with a frequency of 100&nbsp;MHz and not 100&nbsp;Hz.
    2. Change the duration of simulation to 100000ns in **Tools > Settings... > Simulation > Simulation**.
    3. Complete the input data process `p_stimulus`, run the simulation, and verify that the stopwatch is started, paused, and reset correctly.
 

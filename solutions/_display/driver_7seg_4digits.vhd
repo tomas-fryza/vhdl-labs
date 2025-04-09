@@ -64,7 +64,7 @@ end entity driver_7seg_4digits;
 ----------------------------------------------------------
 
 architecture behavioral of driver_7seg_4digits is
-    component simple_counter is
+    component counter is
         generic (
             NBIT : integer
         );
@@ -76,7 +76,7 @@ architecture behavioral of driver_7seg_4digits is
         );
     end component;
 
-    component clock_enable is
+    component clock_en is
         generic (
             PERIOD : integer
         );
@@ -106,10 +106,10 @@ architecture behavioral of driver_7seg_4digits is
 begin
 
     --------------------------------------------------------
-    -- Instance (copy) of clock_enable entity generates
+    -- Instance (copy) of clock_en entity generates
     -- an enable pulse every 4 ms
     --------------------------------------------------------
-    clk_en0 : component clock_enable
+    clk_en0 : component clock_en
         generic map (
             -- 4       @ 40 ns for simulation
             -- 400_000 @ 4 ms
@@ -125,7 +125,7 @@ begin
     -- Instance (copy) of cnt_up_down entity performs
     -- a 2-bit down counter
     --------------------------------------------------------
-    bin_cnt0 : component simple_counter
+    bin_cnt0 : component counter
         generic map (
             NBIT => 2
         )

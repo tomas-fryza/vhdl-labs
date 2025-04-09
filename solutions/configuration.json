@@ -1,7 +1,6 @@
 {
   "rule" : {
     "global": {
-      "case": "upper_or_lower",
       "indentSize": 4
     },
     "instantiation_034": {

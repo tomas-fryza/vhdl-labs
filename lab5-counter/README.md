@@ -71,7 +71,7 @@ A simple **N-bit counter** is a digital circuit and has N output bits representi
    1. Project name: `counter`
    2. Project location: your working folder, such as `Documents`
    3. Project type: **RTL Project**
-   4. Create a VHDL source file: `simple_counter`
+   4. Create a VHDL source file: `counter`
    5. Do not add any constraints now
    6. Choose a default board: `Nexys A7-50T`
    7. Click **Finish** to create the project
@@ -99,7 +99,7 @@ A simple **N-bit counter** is a digital circuit and has N output bits representi
    > ```
 
    ```vhdl
-   architecture behavioral of simple_counter is
+   architecture behavioral of counter is
        ...
    begin
 
@@ -164,20 +164,20 @@ We can write:
 
 
 
-1. Create [testbench](https://vhdl.lapinoo.net/testbench/) file `simple_counter_tb`.
+1. Create [testbench](https://vhdl.lapinoo.net/testbench/) file `counter_tb`.
 
 2. In **design source**, use generic `N_BITS` to define number of bits for the counter. In **testbench**, define a constant `C_NBITS`, prior to declaring the component and use it to declare your internal counter signal:
 
    ```vhdl
    -- Design source file
-   entity simple_counter is
+   entity counter is
        generic (
            N_BITS : integer := 4 --! Default number of bits
        );
        port (
            ...
        );
-   end entity simple_counter;
+   end entity counter;
    ```
 
    ```vhdl
@@ -189,7 +189,7 @@ We can write:
    When you instantiate your counter, you then also bind the `N_BITS` generic to this constant:
 
    ```vhdl
-   dut : component simple_counter
+   dut : component counter
        generic map (
            N_BITS => C_NBITS
        )
@@ -238,7 +238,7 @@ To drive another logic in the design (with slower clock), it is better to genera
 > }
 > ```
 
-1. Create a new VHDL source file: `clock_enable` and define I/O ports as follows:
+1. Create a new VHDL source file: `clock_en` and define I/O ports as follows:
 
    | **Port name** | **Direction** | **Type** | **Description**
    | :-: | :-: | :-- | :--
@@ -249,14 +249,14 @@ To drive another logic in the design (with slower clock), it is better to genera
 2. Add generic `N_PERIODS` to the entity defining the default number of clk periods to generate one pulse.
 
    ```vhdl
-   entity clock_enable is
+   entity clock_en is
        generic (
            N_PERIODS : integer := 6
        );
        port (
            ...
        );
-   end entity clock_enable;
+   end entity clock_en;
    ```
 
 3. Another way how to create a counter is the usage of `integer` data type. In architecture declaration part, define a local counter using the range of integers needed for `N_PERIODS` values. Because all incrementations will be performed with integers and not `std_logic_vector`, no extra package is used.
@@ -266,13 +266,13 @@ To drive another logic in the design (with slower clock), it is better to genera
        use ieee.std_logic_1164.all;
 
    ...
-   architecture behavioral of clock_enable is
+   architecture behavioral of clock_en is
        --! Local counter
        signal sig_count : integer range 0 to N_PERIODS-1;
    begin
    ```
 
-4. Complete the architecture to define the `clock_enable` according to the following structure.
+4. Complete the architecture to define the `clock_en` according to the following structure.
 
    ```vhdl
    begin
@@ -305,7 +305,7 @@ To drive another logic in the design (with slower clock), it is better to genera
 
 5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
-6. Create a VHDL simulation source `clock_enable_tb`, simulate reset functionality and 100 clock periods. Test several `N_PERIODS` values within your testbench.
+6. Create a VHDL simulation source `clock_en_tb`, simulate reset functionality and 100 clock periods. Test several `N_PERIODS` values within your testbench.
 
    > **Solution:** [https://www.edaplayground.com/x/5LiJ](https://www.edaplayground.com/x/5LiJ)
 
@@ -349,7 +349,7 @@ To drive another logic in the design (with slower clock), it is better to genera
 
 3. Copy design source file `bin2seg.vhd` from the previous lab to `YOUR-PROJECT-FOLDER/counter.srcs/sources_1/new/` folder and add it to the project.
 
-4. Use component declaration and instantiation of `simple_counter`, `clock_enable`, and `bin2seg`, and define the top-level architecture as follows.
+4. Use component declaration and instantiation of `counter`, `clock_en`, and `bin2seg`, and define the top-level architecture as follows.
 
    ```vhdl
    architecture behavioral of top_level is
@@ -385,7 +385,7 @@ To drive another logic in the design (with slower clock), it is better to genera
    end architecture behavioral;
    ```
 
-5. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t`, uncomment and modify names of used pins according to the `top_level` entity.
+5. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys`, uncomment and modify names of used pins according to the `top_level` entity.
 
 6. Compile the project (ie. transform the high-level VHDL code into a binary configuration file) and download the generated bitstream `YOUR-PROJECT-FOLDER/counter.runs/impl_1/top_level.bit` into the FPGA chip.
 

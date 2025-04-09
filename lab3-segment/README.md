@@ -282,7 +282,7 @@ Utilize the top-level design `top_level.vhd` to instantiate a `bin2seg` componen
    end architecture behavioral;
    ```
 
-4. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t` and uncomment used pins according to the `top_level` entity.
+4. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys` and uncomment used pins according to the `top_level` entity.
 
 5. Compile the project and download the generated bitstream `YOUR-PROJECT-FOLDER/display.runs/impl_1/top_level.bit` into the FPGA chip.
 

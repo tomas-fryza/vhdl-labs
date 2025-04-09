@@ -205,7 +205,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
    end architecture behavioral;
    ```
 
-4. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t`, uncomment and modify names of used pins according to the `top_level` entity.
+4. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys`, uncomment and modify names of used pins according to the `top_level` entity.
 
 5. Compile the project (ie. transform the high-level VHDL code into a binary configuration file) and download the generated bitstream `YOUR-PROJECT-FOLDER/alu.runs/impl_1/top_level.bit` into the FPGA chip.
 

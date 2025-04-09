@@ -32,7 +32,7 @@ end entity top_level;
 architecture behavioral of top_level is
 
   -- Component declaration for clock enable
-  component clock_enable is
+  component clock_en is
     generic (
       n_periods : integer
     );
@@ -41,7 +41,7 @@ architecture behavioral of top_level is
       rst   : in    std_logic;
       pulse : out   std_logic
     );
-  end component clock_enable;
+  end component clock_en;
 
   -- Component declaration for lfsr counter
   component lfsr is
@@ -65,7 +65,7 @@ architecture behavioral of top_level is
 begin
 
   -- Component instantiation of clock enable for 100 ms
-  CLOCKEN_100MSEC : component clock_enable
+  CLOCKEN_100MSEC : component clock_en
     generic map (
       n_periods => 10_000_000
     )

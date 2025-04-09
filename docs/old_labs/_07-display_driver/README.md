@@ -101,7 +101,7 @@ A display drive is able to control several 7-segment displays. Using the multipl
 
    7. Create a VHDL [simulation source](https://www.edaplayground.com/x/3f_A) `tb_driver_7seg_4digits`, complete the code, set conditions to display value `3.142` and run the simulation. Compare simulated timing diagram with yours in Preparation tasks. Verify reset as well.
 
-      **Important note:** Change the `g_MAX` parameter of `clock_enable` entity in the driver architecture to **4**! Then each clock period will be equivalent to 1 ms and not 10 ns. For implementation, be sure to put the correct value back to 400,000.
+      **Important note:** Change the `g_MAX` parameter of `clock_en` entity in the driver architecture to **4**! Then each clock period will be equivalent to 1 ms and not 10 ns. For implementation, be sure to put the correct value back to 400,000.
 
    8. Use **Flow** > **Open Elaborated design** and see the schematic after RTL analysis. Note that RTL (Register Transfer Level) represents digital circuit at the abstract level.
 

@@ -75,10 +75,10 @@ architecture behavioral of tlc is
 begin
 
   --------------------------------------------------------
-  -- Instance (copy) of clock_enable entity generates
+  -- Instance (copy) of clock_en entity generates
   -- an enable pulse every 250 ms (4 Hz)
   --------------------------------------------------------
-  clk_en0 : entity work.clock_enable
+  clk_en0 : entity work.clock_en
     generic map (
       -- FOR SIMULATION, KEEP THIS VALUE TO 1
       -- FOR IMPLEMENTATION, CALCULATE VALUE: 250 ms / (1/100 MHz)
@@ -94,7 +94,7 @@ begin
 
   --------------------------------------------------------
   --! A sequential process with synchronous reset and
-  --! clock_enable entirely controls the sig_state signal
+  --! clock_en entirely controls the sig_state signal
   --! by CASE statement.
   --------------------------------------------------------
   p_traffic_fsm : process (clk) is

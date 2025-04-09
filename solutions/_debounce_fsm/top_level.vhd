@@ -10,8 +10,8 @@
 --!
 --! Dependencies:
 --!  debounce.vhdl
---!  simple_counter.vhdl
---!  clock_enable.vhdl
+--!  counter.vhdl
+--!  clock_en.vhdl
 --!
 --! Developed using TerosHDL, Vivado 2023.2, and EDA Playground.
 --! Tested on Nexys A7-50T board and xc7a50ticsg324-1L FPGA.
@@ -36,7 +36,7 @@ end entity top_level;
 
 architecture behavioral of top_level is
     -- Component declaration for clock enable
-    component clock_enable is
+    component clock_en is
         generic (
             N_PERIODS : integer
         );
@@ -61,7 +61,7 @@ architecture behavioral of top_level is
     end component;
 
     -- Component declaration for simple counter
-    component simple_counter is
+    component counter is
         generic (
             N_BITS : integer
         );
@@ -81,7 +81,7 @@ architecture behavioral of top_level is
 begin
 
     -- Component instantiation of clock enable for 2 ms
-    clk_en : component clock_enable
+    clk_en : component clock_en
         generic map (
             N_PERIODS => 200_000
         )
@@ -104,7 +104,7 @@ begin
         );
 
     -- Component instantiation of 4-bit simple counter
-    counter : component simple_counter
+    counter : component counter
         generic map (
             N_BITS => 4
         )

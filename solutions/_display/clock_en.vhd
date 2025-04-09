@@ -16,7 +16,7 @@ library ieee;
 
 -------------------------------------------------
 
-entity clock_enable is
+entity clock_en is
     generic (
         PERIOD : integer := 3 --! Default number of clk periodes to generate one pulse
     );
@@ -25,11 +25,11 @@ entity clock_enable is
         rst   : in    std_logic; --! High-active synchronous reset
         pulse : out   std_logic  --! Clock enable pulse signal
     );
-end entity clock_enable;
+end entity clock_en;
 
 -------------------------------------------------
 
-architecture behavioral of clock_enable is
+architecture behavioral of clock_en is
     --! Local counter
     signal sig_count : integer range 0 to PERIOD - 1;
 begin

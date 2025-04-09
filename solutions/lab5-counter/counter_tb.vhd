@@ -1,29 +1,36 @@
 -- Testbench automatically generated online
 -- at https://vhdl.lapinoo.net
--- Generation date : 29.2.2024 08:01:35 UTC
+-- Generation date : 28.2.2024 21:53:41 UTC
 
 library ieee;
   use ieee.std_logic_1164.all;
 
-entity tb_clock_enable is
-end entity tb_clock_enable;
+-------------------------------------------------
 
-architecture tb of tb_clock_enable is
+entity tb_counter is
+end entity tb_counter;
 
-  component clock_enable is
+-------------------------------------------------
+
+architecture tb of tb_counter is
+
+  component counter is
     generic (
-      n_periods : integer
+      n_bits : integer
     );
     port (
       clk   : in    std_logic;
       rst   : in    std_logic;
-      pulse : out   std_logic
+      en    : in    std_logic;
+      count : out   std_logic_vector(N_BITS - 1 downto 0)
     );
-  end component clock_enable;
+  end component counter;
 
-  signal clk   : std_logic;
-  signal rst   : std_logic;
-  signal pulse : std_logic;
+  constant c_nbits : integer := 5;
+  signal   clk     : std_logic;
+  signal   rst     : std_logic;
+  signal   en      : std_logic;
+  signal   count   : std_logic_vector(c_nbits - 1 downto 0);
 
   constant tbperiod   : time      := 10 ns; -- EDIT Put right period here
   signal   tbclock    : std_logic := '0';
@@ -31,14 +38,15 @@ architecture tb of tb_clock_enable is
 
 begin
 
-  dut : component clock_enable
+  dut : component counter
     generic map (
-      n_periods => 11
+      n_bits => c_nbits
     )
     port map (
       clk   => clk,
       rst   => rst,
-      pulse => pulse
+      en    => en,
+      count => count
     );
 
   -- Clock generation
@@ -52,6 +60,7 @@ begin
   begin
 
     -- EDIT Adapt initialization as needed
+    en <= '1';
 
     -- Reset generation
     -- EDIT: Check that rst is really your reset signal
@@ -61,7 +70,21 @@ begin
     wait for 100 ns;
 
     -- EDIT Add stimuli here
-    wait for 100 * tbperiod;
+    wait for 33 * tbperiod;
+    en <= '0';
+    wait for 6 * tbperiod;
+    en <= '1';
+    wait for 1 * tbperiod;
+    en <= '0';
+    wait for 6 * tbperiod;
+    en <= '1';
+    wait for 1 * tbperiod;
+    en <= '0';
+    wait for 6 * tbperiod;
+    en <= '1';
+    wait for 1 * tbperiod;
+    en <= '0';
+    wait for 6 * tbperiod;
 
     -- Stop the clock and hence terminate the simulation
     tbsimended <= '1';
@@ -73,7 +96,7 @@ end architecture tb;
 
 -- Configuration block below is required by some simulators. Usually no need to edit.
 
-configuration cfg_tb_clock_enable of tb_clock_enable is
+configuration cfg_tb_counter of tb_counter is
     for tb
     end for;
-end cfg_tb_clock_enable;
+end cfg_tb_counter;

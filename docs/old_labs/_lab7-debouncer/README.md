@@ -250,15 +250,15 @@ A positive **edge detector** generates a single clock pulse when the input signa
 
 1. Create a VHDL design source named `top_level` and implement a button-triggered 4-bit simple counter on the Nexys A7 board. Read `BTNR` button every 2 milliseconds and on rising edge of clean/debounced signal increment the counter value on the LEDs.
 
-   Use component declarations and instantiations of `clock_enable`, `debounce` and `simple_counter`, and define the top-level architecture as follows. Use reserved keyword `open` when you instantiate a module that has an output that is not needed.
+   Use component declarations and instantiations of `clock_en`, `debounce` and `counter`, and define the top-level architecture as follows. Use reserved keyword `open` when you instantiate a module that has an output that is not needed.
 
    ![top level](images/top-level_debounce_structure.png)
 
-   > **Note:** The `clock_enable` and `simple_counter` components from the previous labs are required. Do not forget to copy both files to `YOUR-PROJECT-FOLDER/debounce.srcs/sources_1/new/` folder and add them to the project.
+   > **Note:** The `clock_en` and `counter` components from the previous labs are required. Do not forget to copy both files to `YOUR-PROJECT-FOLDER/debounce.srcs/sources_1/new/` folder and add them to the project.
    >
    > **Note:** Use online template for your [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t` and uncomment the used pins according to the top_level entity.
 
-2. Move `clock_enable` instanciation to the `debounce` component.
+2. Move `clock_en` instanciation to the `debounce` component.
 
 3. Use iterative `generate` statement from the [previous lab](https://github.com/tomas-fryza/vhdl-course/tree/master/lab6-lfsr#part3) and extend the instantiation of `debounce` component to several buttons.
 
