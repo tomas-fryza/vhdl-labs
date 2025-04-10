@@ -105,45 +105,52 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
       | :-: | :-: | :-- | :-- |
       | `clk`      | input  | `std_logic` | Main clock |
       | `rst`      | input  | `std_logic` | High-active synchronous reset |
-      | `baud_en`  | input  | `std_logic` | Clock Enable signal (Baud tick) |
+      | `data`  | input  | `std_logic_vector(7 downto 0)` | Data to transmit |
       | `tx_start` | input  | `std_logic` | Start transmission |
-      | `data_in`  | input  | `std_logic_vector(7 downto 0)` | Data to transmit |
       | `tx` | output | `std_logic` | UART Tx line |
       | `done` | output | `std_logic` | Transmission completed |
 
-2. Define four states for the FSM and an internal counter in the architecture declaration section to count a sequence of data bits.
+2. Add two generics:
+
+   ```vhdl
+   entity uart_tx is
+       generic (
+           CLK_FREQ : integer := 100_000_000;
+           BAUDRATE : integer := 9_600
+       );
+       ...
+   ```
+
+3. Define four states for the FSM and an internal counters in the architecture declaration section to count a sequence of data bits and clock periods.
 
     ```vhdl
     architecture behavioral of uart_tx is
-        -- FSM States
-        type   state_type is (IDLE, START_BIT, DATA, STOP_BIT);
-        signal state_tx : state_type;
+        type   state_type is (IDLE, START_BIT, DATA_BITS, STOP_BIT);
+        signal state : state_type;
 
-        -- Transmission Registers
-        signal sig_count : integer range 0 to 7;
-        signal sig_reg   : std_logic_vector(7 downto 0);
+        constant N_PERIODS : integer := (CLK_FREQ / BAUDRATE);
+
+        signal bits    : integer range 0 to 7;
+        signal periods : integer range 0 to N_PERIODS - 1;
+        signal reg     : std_logic_vector(7 downto 0);
+
     begin
         ...
     ```
 
-3. Complete the architecture body section according to the following template.
+4. Complete the architecture body section according to the following template.
 
     ```vhdl
     begin
-
         -- UART Transmitter FSM
-        p_uart_tx : process (clk) is
+        p_transmitter : process (clk) is
         begin
-
             if rising_edge(clk) then
                 if (rst = '1') then
-                    -- Reset state to IDLE, set Tx to 1
+                    -- Reset state to IDLE
 
-                    -- Reset sig_count to 0 and done to 0
-
-                elsif (baud_en = '1') then  -- Use clock enable signal
-
-                    case state_tx is
+                else
+                    case state is
 
                         when IDLE =>
                             -- Keep Tx line to high
@@ -151,24 +158,40 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                             -- Clear done to 0
 
                             if (tx_start = '1') then
-                                state_tx <= START_BIT;
+                                periods <= 0;
+                                state   <= START_BIT;
                             end if;
 
                         when START_BIT =>
-                            -- Start bit (LOW), Load data to transmit
-                            tx        <= '0';
-                            sig_reg   <= data_in;
-                            sig_count <= 0;
-                            done   <= '0';
-                            state_tx  <= DATA;
+                            -- Start bit (LOW), Load data to transmit register
 
-                        when DATA =>
-                            tx      <=  -- Transmit LSB first
-                            sig_reg <=  -- Shift register to right
-                            if (sig_count = 7) then
-                                state_tx <= STOP_BIT;
+                            -- Reset number of transmitted bits
+
+                            -- Wait for bit period according to baudrate
+                            if (periods = N_PERIODS - 1) then
+                                state   <= DATA_BITS;
+                                periods <= 0;
                             else
-                                sig_count <= sig_count + 1;
+                                periods <= periods + 1;
+                            end if;
+
+                        when DATA_BITS =>
+                            -- Transmit LSB
+
+                            -- Wait for bit period according to baudrate
+                            if (periods = N_PERIODS - 1) then
+                                -- Shift data register
+                                reg     <= '0' & reg(7 downto 1);
+                                periods <= 0;
+
+                                -- Send all data bits
+                                if (bits = 7) then
+                                    state <= STOP_BIT;
+                                else
+                                    bits <= bits + 1;
+                                end if;
+                            else
+                                periods <= periods + 1;
                             end if;
 
                         when STOP_BIT =>
@@ -176,28 +199,30 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
                             -- Set done to 1
 
-                            -- Set next state to IDLE
+                            -- Wait for bit period according to baudrate
+                            if (periods = N_PERIODS - 1) then
+                                state <= IDLE;
+                            else
+                                periods <= periods + 1;
+                            end if;
 
                         when others =>
-                            state_tx <= IDLE;
+                            state <= IDLE;
 
                     end case;
-
                 end if;
             end if;
-
-        end process p_uart_tx;
-
+        end process p_transmitter;
     end architecture behavioral;
     ```
 
-4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
+5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
-5. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `uart_tx_tb`, execute the simulation, and validate the functionality.
+6. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `uart_tx_tb`, add generics to testbench, and simulate the UART frames for data bytes `0x41` and `0x43` with baudrate of 9600.
 
    > **Note:** To display internal signal values, follow these steps:
    > 1. Select `dut` in the **Scope** folder.
-   > 2. Right-click on the `state_tx` signal name in the **Objects** folder.
+   > 2. Right-click on the `state` signal name in the **Objects** folder.
    > 3. Add this signal by selecting the **Add to Wave Window** command.
    > 4. Click on the **Relaunch Simulation** icon.
    >
@@ -211,13 +236,12 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
    ![top level](images/top-level_ver1.png)
 
-   > **Notes:**
-   > * The `clock_en` component from the previous lab(s) is required. Do not forget to copy both files to `YOUR-PROJECT-FOLDER/uart.srcs/sources_1/new/` folder and add them to the project or use **Copy scripts to project** checkbox while adding design source file in Vivado.
+   > **Note:**
    > * Your transmitter signal `tx` must be connected to onboard FTDI FT2232HQ USB-UART bridge receiver, ie. use pin number `D4` which is maped in XDC template to `UART_RXD_OUT` (see [Nexys A7 reference manual, section 6](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual?redirect=1)).
    
 2. Use online template for your [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys` and uncomment the used pins according to the `top_level` entity.
 
-3. Run Putty or any other serial monitor application or [web application](https://hhdsoftware.com/online-serial-port-monitor). Set the **Connection type** to `Serial`, specify your **Serial line** (e.g., COM3), set the **Speed** (or Baud Rate), and then click the **Open** button to initiate the communication. Clicking the Up button on the board will transmit the user data selected by the switches.
+3. Run Putty or [online serial monitor](https://hhdsoftware.com/online-serial-port-monitor). Set the **Connection type** to `Serial`, specify your **Serial line** (e.g., COM3), set the **Speed** (or Baud Rate), and then click the **Open** button to initiate the communication. Clicking the Left button on the board will transmit the user data selected by the switches.
 
    ![putty1](images/screenshot_putty_type.png)
 <!--   ![putty2](images/screenshot_putty_config.png)-->
@@ -226,17 +250,25 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
 ## Challenges
 
-1. In the `*.xdc` constraints file, remap the UART outputs to any Pmod port on the Nexys A7 board, and display the UART values on an oscilloscope or logic analyzer.
+1. Modify the UART transmitter according to the following top level schematic:
+
+   ![top level](images/top-level_ver2.png)
+
+   > **Note:**
+   > * The `counter` component from the previous lab(s) is required. You can copy the `counter.vhd` file to `YOUR-PROJECT-FOLDER/uart.srcs/sources_1/new/` folder and add it to the project or use **Copy scripts to project** checkbox while adding design source file in Vivado.
+   > * The source code of component `debounce` is defined [here](https://raw.githubusercontent.com/tomas-fryza/vhdl-labs/refs/heads/master/solutions/_debounce/debounce.vhd).
+
+2. In the `*.xdc` constraints file, remap the UART outputs to any Pmod port on the Nexys A7 board, and display the UART values on an oscilloscope or logic analyzer.
 
    ![pmods](images/pmod_table.png)
 
-2. Connect the logic analyzer to your Pmod pins, including GND. Launch the **Logic** analyzer software and start the capture. The Saleae Logic software offers a decoding feature to transform the captured signals into meaningful UART messages. Click the **+ button** in the **Analyzers** section and set up the **Async Serial** decoder.
+   Connect the logic analyzer to your Pmod pins, including GND. Launch the **Logic** analyzer software and start the capture. The Saleae Logic software offers a decoding feature to transform the captured signals into meaningful UART messages. Click the **+ button** in the **Analyzers** section and set up the **Async Serial** decoder.
 
-   ![Logic analyzer -- Paris](images/analyzer_paris.png)
+      ![Logic analyzer -- Paris](images/analyzer_paris.png)
 
-   > **Note:** To perform this analysis, you will need a logic analyzer such as [Saleae](https://www.saleae.com/) or [similar](https://www.amazon.com/KeeYees-Analyzer-Device-Channel-Arduino/dp/B07K6HXDH1/ref=sr_1_6?keywords=saleae+logic+analyzer&qid=1667214875&qu=eyJxc2MiOiI0LjIyIiwicXNhIjoiMy45NSIsInFzcCI6IjMuMDMifQ%3D%3D&sprefix=saleae+%2Caps%2C169&sr=8-6) device. Additionally, you should download and install the [Saleae Logic 1](https://support.saleae.com/logic-software/legacy-software/older-software-releases#logic-1-x-download-links) or [Saleae Logic 2](https://www.saleae.com/downloads/) software on your computer.
-   >
-   > You can find a comprehensive tutorial on utilizing logic analyzer in this [video](https://www.youtube.com/watch?v=CE4-T53Bhu0).
+      > **Note:** To perform this analysis, you will need a logic analyzer such as [Saleae](https://www.saleae.com/) or [similar](https://www.amazon.com/KeeYees-Analyzer-Device-Channel-Arduino/dp/B07K6HXDH1/ref=sr_1_6?keywords=saleae+logic+analyzer&qid=1667214875&qu=eyJxc2MiOiI0LjIyIiwicXNhIjoiMy45NSIsInFzcCI6IjMuMDMifQ%3D%3D&sprefix=saleae+%2Caps%2C169&sr=8-6) device. Additionally, you should download and install the [Saleae Logic 1](https://support.saleae.com/logic-software/legacy-software/older-software-releases#logic-1-x-download-links) or [Saleae Logic 2](https://www.saleae.com/downloads/) software on your computer.
+      >
+      > You can find a comprehensive tutorial on utilizing logic analyzer in this [video](https://www.youtube.com/watch?v=CE4-T53Bhu0).
 
 <a name="references"></a>
 

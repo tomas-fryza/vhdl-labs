@@ -1,23 +1,19 @@
+-- Testbench automatically generated online
+-- at https://vhdl.lapinoo.net
+-- Generation date : Thu, 10 Apr 2025 18:59:05 GMT
+-- Request id : cfwk-fed377c2-67f814f99600d
+
 library ieee;
     use ieee.std_logic_1164.all;
-    use ieee.numeric_std.all;
-    use ieee.math_real.all;
 
-entity debounce_tb is
-end entity debounce_tb;
+entity tb_debounce is
+end entity tb_debounce;
 
-architecture tb of debounce_tb is
-    signal halt_sys_clock : boolean;
-
-    signal   clk      : std_logic;
-    signal   btn_in   : std_logic;
-    signal   btn_out  : std_logic;
-    signal   edge     : std_logic;
-    signal   rise     : std_logic;
-    signal   fall     : std_logic;
-    constant TbPeriod : time := 10 ns;
-
+architecture tb of tb_debounce is
     component debounce is
+        generic (
+            DB_TIME : time
+        );
         port (
             clk     : in    std_logic;
             btn_in  : in    std_logic;
@@ -28,8 +24,22 @@ architecture tb of debounce_tb is
         );
     end component debounce;
 
+    signal clk     : std_logic;
+    signal btn_in  : std_logic;
+    signal btn_out : std_logic;
+    signal edge    : std_logic;
+    signal rise    : std_logic;
+    signal fall    : std_logic;
+
+    constant TBPERIOD   : time      := 10 ns; -- ***EDIT*** Put right period here
+    signal   tbclock    : std_logic := '0';
+    signal   tbsimended : std_logic := '0';
+
 begin
     dut : component debounce
+        generic map (
+            DB_TIME => 25 ns
+        )
         port map (
             clk     => clk,
             btn_in  => btn_in,
@@ -39,70 +49,39 @@ begin
             fall    => fall
         );
 
-    clockgenerator : process is
+    -- Clock generation
+    tbclock <= not tbclock after TBPERIOD / 2 when tbsimended /= '1' else
+               '0';
+
+    -- ***EDIT*** Check that clk is really your main clock signal
+    clk <= tbclock;
+
+    stimuli : process is
     begin
+        btn_in <= '0';
+        wait for 50 * TBPERIOD;
 
-        while not halt_sys_clock loop
-            clk <= not clk;
-            wait for TbPeriod / 2.0;
-        end loop;
-
-        wait;
-
-    end process clockgenerator;
-
-    stimulus : process is
-
-        constant NUM_NOISE_SAMPLES : positive := 10;
-        constant SWITCH_TIME       : time     := 2 * 25 ms;
-        variable seed1             : positive := 1;
-        variable seed2             : positive := 1;
-        variable rrand             : real;
-        variable nrand             : natural;
-
-        -- Performs noisy transition of sig from current value to final value.
-
-        procedure noisytransition (
-            signal sig : out std_logic;
-            final      : std_logic
-        ) is
-        begin
-
-            for n in 1 to NUM_NOISE_SAMPLES loop
-                uniform(seed1, seed2, rrand);
-                nrand := natural(round(rrand));
-
-                if (nrand = 0) then
-                    sig <= not final;
-                else
-                    sig <= final;
-                end if;
-
-                wait for TbPeriod / 5.0;
-            end loop;
-
-            sig <= final;
-            wait for SWITCH_TIME;
-
-        end procedure noisytransition;
-
-    begin
-
-        halt_sys_clock <= True;
+        btn_in <= '1';
+        wait for 11 ns;
+        btn_in <= '0';
+        wait for 11 ns;
+        btn_in <= '1';
+        wait for 11 ns;
+        btn_in <= '0';
+        wait for 11 ns;
+        btn_in <= '1';
+        wait for 100 * TBPERIOD;
 
         btn_in <= '0';
-        wait for 3 ns;
+        wait for 11 ns;
+        btn_in <= '1';
+        wait for 11 ns;
+        btn_in <= '0';
+        wait for 100 * TBPERIOD;
 
-        --
-        -- Up Button
-        -- Perform 4 noisy presses and releases.
-        for n in 1 to 4 loop
-            noisytransition(btn_in, '1');
-            noisytransition(btn_in, '0');
-        end loop;
-
-        halt_sys_clock <= true;
+        -- Stop the clock and hence terminate the simulation
+        tbsimended <= '1';
         wait;
+    end process stimuli;
 
-    end process stimulus;
 end architecture tb;

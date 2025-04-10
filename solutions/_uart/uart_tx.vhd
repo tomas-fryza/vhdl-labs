@@ -28,17 +28,17 @@ entity uart_tx is
         data     : in    std_logic_vector(7 downto 0); --! Data to transmit
         tx_start : in    std_logic;                    --! Start transmission
         tx       : out   std_logic;                    --! UART Tx line
-        done     : out   std_logic                     --! UART frame transmitted
+        done     : out   std_logic                     --! Transmission completed
     );
 end entity uart_tx;
 
 -------------------------------------------------
 
 architecture behavioral of uart_tx is
-    constant N_PERIODS : integer := (CLK_FREQ / BAUDRATE);
-
-    type state_type is (IDLE, START_BIT, DATA_BITS, STOP_BIT);
+    type   state_type is (IDLE, START_BIT, DATA_BITS, STOP_BIT);
     signal state : state_type;
+
+    constant N_PERIODS : integer := (CLK_FREQ / BAUDRATE);
 
     signal bits    : integer range 0 to 7;
     signal periods : integer range 0 to N_PERIODS - 1;

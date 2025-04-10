@@ -5,6 +5,9 @@ library ieee;
     use ieee.numeric_std.all;
 
 entity debounce is
+    generic (
+        DB_TIME : time := 25 ms
+    );
     port (
         clk     : in    std_logic;
         btn_in  : in    std_logic; -- Asynchronous and noisy input
@@ -16,25 +19,22 @@ entity debounce is
 end entity debounce;
 
 architecture v1 of debounce is
-    constant CLK_PERIOD    : time     := 10 ns;
-    constant DEBOUNCE_TIME : time     := 25 ms;
-    constant MAX_COUNT     : natural  := DEBOUNCE_TIME / CLK_PERIOD;
-    constant SYNC_BITS     : positive := 2;  -- Number of bits in the synchronisation buffer (2 minimum)
+    constant CLK_PERIOD : time     := 10 ns;
+    constant MAX_COUNT  : natural  := DB_TIME / CLK_PERIOD;
+    constant SYNC_BITS  : positive := 2;  -- Number of bits in the synchronisation buffer (2 minimum)
 
     signal sync_buffer : std_logic_vector(SYNC_BITS - 1 downto 0);
     alias  sync_input  : std_logic is sync_buffer(SYNC_BITS - 1);
     signal sig_count   : natural range 0 to MAX_COUNT - 1;
     signal sig_btn     : std_logic;
+
 begin
-
     p_debounce : process (clk) is
-
         variable edge_internal : std_logic;
         variable rise_internal : std_logic;
         variable fall_internal : std_logic;
 
     begin
-
         if rising_edge(clk) then
             -- Synchronise the asynchronous input
             -- MSB of sync_buffer is the synchronised input
