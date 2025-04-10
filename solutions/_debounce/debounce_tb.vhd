@@ -7,53 +7,43 @@ entity debounce_tb is
 end entity debounce_tb;
 
 architecture tb of debounce_tb is
-    constant CLOCK_PERIOD    : time := 10 ns;
-    constant DEBOUNCE_PERIOD : time := 200 ns;
-
     signal halt_sys_clock : boolean;
 
-    signal clock  : std_logic;
-    signal btn_up : std_logic;
-    signal output : std_logic;
-    signal edge   : std_logic;
-    signal rise   : std_logic;
-    signal fall   : std_logic;
+    signal clk     : std_logic;
+    signal btn_in  : std_logic;
+    signal btn_out : std_logic;
+    signal edge    : std_logic;
+    signal rise    : std_logic;
+    signal fall    : std_logic;
+    constant TbPeriod : time := 10 ns;
 
     component debounce is
-        generic (
-            CLOCK_PERIOD    : time := 10 ns;
-            DEBOUNCE_PERIOD : time := 25 ms
-        );
         port (
-            clock  : in    std_logic;
-            input  : in    std_logic;
-            output : out   std_logic;
-            edge   : out   std_logic;
-            rise   : out   std_logic;
-            fall   : out   std_logic
+            clk     : in    std_logic;
+            btn_in  : in    std_logic;
+            btn_out : out   std_logic;
+            edge    : out   std_logic;
+            rise    : out   std_logic;
+            fall    : out   std_logic
         );
     end component debounce;
 
 begin
     dut : component debounce
-        generic map (
-            clock_period    => CLOCK_PERIOD,
-            debounce_period => DEBOUNCE_PERIOD
-        )
         port map (
-            clock  => clock,
-            input  => btn_up,
-            output => output,
-            edge   => edge,
-            rise   => rise,
-            fall   => fall
+            clk     => clk,
+            btn_in  => btn_in,
+            btn_out => btn_out,
+            edge    => edge,
+            rise    => rise,
+            fall    => fall
         );
 
     clockgenerator : process is
     begin
         while not halt_sys_clock loop
-            clock <= not clock;
-            wait for CLOCK_PERIOD / 2.0;
+            clk <= not clk;
+            wait for TbPeriod / 2.0;
         end loop;
 
         wait;
@@ -61,7 +51,7 @@ begin
 
     stimulus : process is
         constant NUM_NOISE_SAMPLES : positive := 10;
-        constant SWITCH_TIME       : time     := 2 * DEBOUNCE_PERIOD;
+        constant SWITCH_TIME       : time     := 2 * 25 ms;
         variable seed1             : positive := 1;
         variable seed2             : positive := 1;
         variable rrand             : real;
@@ -85,7 +75,7 @@ begin
                     sig <= final;
                 end if;
 
-                wait for CLOCK_PERIOD / 5.0;
+                wait for TbPeriod / 5.0;
             end loop;
 
             sig <= final;
@@ -95,15 +85,15 @@ begin
     begin
         halt_sys_clock <= True;
 
-        btn_up <= '0';
+        btn_in <= '0';
         wait for 3 ns;
 
         --
         -- Up Button
         -- Perform 4 noisy presses and releases.
         for n in 1 to 4 loop
-            noisytransition(btn_up, '1');
-            noisytransition(btn_up, '0');
+            noisytransition(btn_in, '1');
+            noisytransition(btn_in, '0');
         end loop;
 
         halt_sys_clock <= true;

@@ -15,23 +15,25 @@ architecture tb of tb_uart_tx is
             CLK_FREQ : integer;
             BAUDRATE : integer
         );
-            port (clk      : in std_logic;
-              rst      : in std_logic;
-              data_in  : in std_logic_vector (7 downto 0);
-              tx_start : in std_logic;
-              tx       : out std_logic;
-              tx_done  : out std_logic);
+        port (
+            clk      : in  std_logic;
+            rst      : in  std_logic;
+            data     : in  std_logic_vector (7 downto 0);
+            tx_start : in  std_logic;
+            tx       : out std_logic;
+            done     : out std_logic
+        );
     end component;
 
     signal clk      : std_logic;
     signal rst      : std_logic;
-    signal data_in  : std_logic_vector (7 downto 0);
+    signal data     : std_logic_vector (7 downto 0);
     signal tx_start : std_logic;
     signal tx       : std_logic;
-    signal tx_done  : std_logic;
+    signal done     : std_logic;
 
     constant TbPeriod : time := 10 ns; -- ***EDIT*** Put right period here
-    signal TbClock : std_logic := '0';
+    signal TbClock    : std_logic := '0';
     signal TbSimEnded : std_logic := '0';
 
 begin
@@ -44,7 +46,7 @@ begin
               data_in  => data_in,
               tx_start => tx_start,
               tx       => tx,
-              tx_done  => tx_done);
+              done     => done);
 
     -- Clock generation
     TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
@@ -54,32 +56,28 @@ begin
 
     stimuli : process
     begin
-        -- EDIT Adapt initialization as needed
-        -- tx_start <= '0';
-        -- data_in  <= (others => '0');
-
         -- Reset generation
         rst <= '1';
         wait for 20 ns;
         rst <= '0';
         wait for 20 ns;
 
-        data_in  <= b"0101_0101";
-        wait for 3 * tbperiod;
+        data <= b"0101_0101";
+        wait for 3 * TbPeriod;
         tx_start <= '1';
-        wait for 1 * tbperiod;
+        wait for 1 * TbPeriod;
         tx_start <= '0';
-        wait for 100 * tbperiod;
+        wait for 100 * TbPeriod;
 
-        data_in  <= x"43";
-        wait for 3 * tbperiod;
+        data <= x"43";
+        wait for 3 * TbPeriod;
         tx_start <= '1';
-        wait for 1 * tbperiod;
+        wait for 1 * TbPeriod;
         tx_start <= '0';
-        wait for 100 * tbperiod;
+        wait for 100 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation
-        tbsimended <= '1';
+        TbSimEnded <= '1';
         wait;
     end process;
 

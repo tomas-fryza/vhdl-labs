@@ -29,7 +29,7 @@ entity uart_tx is
         tx_start : in    std_logic;                    --! Start transmission
         data_in  : in    std_logic_vector(7 downto 0); --! Data to transmit
         tx       : out   std_logic;                    --! UART Tx line
-        tx_done  : out   std_logic                     --! Ready for transmission
+        done  : out   std_logic                     --! Ready for transmission
     );
 end entity uart_tx;
 
@@ -53,7 +53,7 @@ begin
             if (rst = '1') then
                 tx        <= '1';
                 sig_count <= 0;
-                tx_done   <= '0';
+                done   <= '0';
                 state_tx  <= idle;
             elsif (baud_en = '1') then
 
@@ -61,7 +61,7 @@ begin
 
                     when idle =>
                         tx      <= '1';
-                        tx_done <= '0';
+                        done <= '0';
                         if (tx_start = '1') then
                             state_tx <= start_bit;
                         end if;
@@ -71,7 +71,7 @@ begin
                         tx        <= '0';
                         sig_reg   <= data_in;
                         sig_count <= 0;
-                        tx_done   <= '0';
+                        done   <= '0';
                         state_tx  <= data;
 
                     when data =>
@@ -88,7 +88,7 @@ begin
                     when stop_bit =>
                         -- Stop bit (HIGH)
                         tx       <= '1';
-                        tx_done  <= '1';
+                        done  <= '1';
                         state_tx <= idle;
 
                     when others =>

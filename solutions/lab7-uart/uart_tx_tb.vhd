@@ -17,7 +17,7 @@ architecture tb of tb_uart_tx is
             tx_start : in    std_logic;
             data_in  : in    std_logic_vector(7 downto 0);
             tx       : out   std_logic;
-            tx_done  : out   std_logic
+            done  : out   std_logic
         );
     end component uart_tx;
 
@@ -27,7 +27,7 @@ architecture tb of tb_uart_tx is
     signal tx_start : std_logic;
     signal data_in  : std_logic_vector(7 downto 0);
     signal tx       : std_logic;
-    signal tx_done  : std_logic;
+    signal done  : std_logic;
 
     constant tbperiod   : time      := 10 ns; -- EDIT Put right period here
     signal   tbclock    : std_logic := '0';
@@ -42,7 +42,7 @@ begin
             tx_start => tx_start,
             data_in  => data_in,
             tx       => tx,
-            tx_done  => tx_done
+            done  => done
         );
 
     -- Clock generation

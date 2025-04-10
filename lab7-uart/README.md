@@ -109,7 +109,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
       | `tx_start` | input  | `std_logic` | Start transmission |
       | `data_in`  | input  | `std_logic_vector(7 downto 0)` | Data to transmit |
       | `tx` | output | `std_logic` | UART Tx line |
-      | `tx_done` | output | `std_logic` | Transmission completed |
+      | `done` | output | `std_logic` | Transmission completed |
 
 2. Define four states for the FSM and an internal counter in the architecture declaration section to count a sequence of data bits.
 
@@ -139,7 +139,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                 if (rst = '1') then
                     -- Reset state to IDLE, set Tx to 1
 
-                    -- Reset sig_count to 0 and tx_done to 0
+                    -- Reset sig_count to 0 and done to 0
 
                 elsif (baud_en = '1') then  -- Use clock enable signal
 
@@ -148,7 +148,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                         when IDLE =>
                             -- Keep Tx line to high
 
-                            -- Clear tx_done to 0
+                            -- Clear done to 0
 
                             if (tx_start = '1') then
                                 state_tx <= START_BIT;
@@ -159,7 +159,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                             tx        <= '0';
                             sig_reg   <= data_in;
                             sig_count <= 0;
-                            tx_done   <= '0';
+                            done   <= '0';
                             state_tx  <= DATA;
 
                         when DATA =>
@@ -174,7 +174,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                         when STOP_BIT =>
                             -- Set Tx stop bit (HIGH)
 
-                            -- Set tx_done to 1
+                            -- Set done to 1
 
                             -- Set next state to IDLE
 

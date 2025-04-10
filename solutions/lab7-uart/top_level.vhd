@@ -33,7 +33,7 @@ architecture Behavioral of top_level is
             tx_start : in    std_logic;
             data_in  : in    std_logic_vector(7 downto 0);
             tx       : out   std_logic;
-            tx_done  : out   std_logic
+            done  : out   std_logic
         );
     end component;
 
@@ -60,7 +60,7 @@ begin
             data_in  => SW,
             baud_en  => sig_9600bd,
             tx       => UART_RXD_OUT,
-            tx_done  => LED16_B
+            done  => LED16_B
         );
 
 end architecture Behavioral;
