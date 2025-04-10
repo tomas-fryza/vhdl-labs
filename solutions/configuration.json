@@ -31,6 +31,9 @@
     "generic_007": {
       "case": "upper"
     },
+    "generic_map_002": {
+      "case": "upper"
+    },
     "if_007": {
       "disable": "True"
     },
