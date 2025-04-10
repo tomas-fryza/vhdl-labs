@@ -9,12 +9,12 @@ end entity debounce_tb;
 architecture tb of debounce_tb is
     signal halt_sys_clock : boolean;
 
-    signal clk     : std_logic;
-    signal btn_in  : std_logic;
-    signal btn_out : std_logic;
-    signal edge    : std_logic;
-    signal rise    : std_logic;
-    signal fall    : std_logic;
+    signal   clk      : std_logic;
+    signal   btn_in   : std_logic;
+    signal   btn_out  : std_logic;
+    signal   edge     : std_logic;
+    signal   rise     : std_logic;
+    signal   fall     : std_logic;
     constant TbPeriod : time := 10 ns;
 
     component debounce is
@@ -41,15 +41,18 @@ begin
 
     clockgenerator : process is
     begin
+
         while not halt_sys_clock loop
             clk <= not clk;
             wait for TbPeriod / 2.0;
         end loop;
 
         wait;
+
     end process clockgenerator;
 
     stimulus : process is
+
         constant NUM_NOISE_SAMPLES : positive := 10;
         constant SWITCH_TIME       : time     := 2 * 25 ms;
         variable seed1             : positive := 1;
@@ -80,9 +83,11 @@ begin
 
             sig <= final;
             wait for SWITCH_TIME;
+
         end procedure noisytransition;
 
     begin
+
         halt_sys_clock <= True;
 
         btn_in <= '0';
@@ -100,4 +105,4 @@ begin
         wait;
 
     end process stimulus;
-end architecture v1;
+end architecture tb;

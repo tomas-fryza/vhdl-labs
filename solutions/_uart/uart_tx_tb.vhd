@@ -43,7 +43,7 @@ begin
                 BAUDRATE => 15_600_000)  -- For simulation only
     port map (clk      => clk,
               rst      => rst,
-              data_in  => data_in,
+              data     => data,
               tx_start => tx_start,
               tx       => tx,
               done     => done);
