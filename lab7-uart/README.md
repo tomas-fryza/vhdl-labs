@@ -256,7 +256,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
    > **Note:**
    > * The `counter` component from the previous lab(s) is required. You can copy the `counter.vhd` file to `YOUR-PROJECT-FOLDER/uart.srcs/sources_1/new/` folder and add it to the project or use **Copy scripts to project** checkbox while adding design source file in Vivado.
-   > * The source code of component `debounce` is defined [here](https://raw.githubusercontent.com/tomas-fryza/vhdl-labs/refs/heads/master/solutions/_debounce/debounce.vhd).
+   > * The source code of component `debounce` is defined [here](https://raw.githubusercontent.com/tomas-fryza/vhdl-labs/refs/heads/master/examples/_debounce/debounce.vhd).
 
 2. In the `*.xdc` constraints file, remap the UART outputs to any Pmod port on the Nexys A7 board, and display the UART values on an oscilloscope or logic analyzer.
 
