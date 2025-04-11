@@ -1,104 +1,121 @@
 -------------------------------------------------
 --! @brief UART Transmitter
---! @version 1.0
+--! @version 1.1
 --! @copyright (c) 2025 Tomas Fryza, MIT license
 --!
 --! This module implements a UART (Universal Asynchronous
 --! Receiver Transmitter) transmitter using a Finite State
---! Machine (FSM). The transmitter sends an 8-bit data
---! frame over a serial interface, including start, stop,
---! and no parity bit.
+--! Machine (FSM) in 8N1 mode with variable baudrate.
 --!
---! Notes:
---!   - Ensure that 'baud_en' matches the desired baud rate.
---!
---! Developed using TerosHDL, Vivado 2020.2, and EDA Playground.
+--! Developed using TerosHDL and Vivado 2020.2.
 --! Tested on Nexys A7-50T board and xc7a50ticsg324-1L FPGA.
 -------------------------------------------------
 
 library ieee;
     use ieee.std_logic_1164.all;
+    use ieee.numeric_std.all;
 
 -------------------------------------------------
 
 entity uart_tx is
+    generic (
+        CLK_FREQ : integer := 100_000_000;
+        BAUDRATE : integer := 9_600
+    );
     port (
         clk      : in    std_logic;                    --! Main clock
         rst      : in    std_logic;                    --! High-active synchronous reset
-        baud_en  : in    std_logic;                    --! Clock Enable signal (Baud tick)
+        data     : in    std_logic_vector(7 downto 0); --! Data to transmit
         tx_start : in    std_logic;                    --! Start transmission
-        data_in  : in    std_logic_vector(7 downto 0); --! Data to transmit
         tx       : out   std_logic;                    --! UART Tx line
-        done  : out   std_logic                     --! Ready for transmission
+        done     : out   std_logic                     --! Transmission completed
     );
 end entity uart_tx;
 
 -------------------------------------------------
 
 architecture behavioral of uart_tx is
-    -- FSM States
-    type   state_type is (idle, start_bit, data, stop_bit);
-    signal state_tx : state_type;
+    type   state_type is (IDLE, START_BIT, DATA_BITS, STOP_BIT);
+    signal state : state_type;
 
-    -- Transmission Registers
-    signal sig_count : integer range 0 to 7;
-    signal sig_reg   : std_logic_vector(7 downto 0);
+    constant N_PERIODS : integer := (CLK_FREQ / BAUDRATE);
+
+    signal bits    : integer range 0 to 7;
+    signal periods : integer range 0 to N_PERIODS - 1;
+    signal reg     : std_logic_vector(7 downto 0);
+
 begin
-
     -- UART Transmitter FSM
-    p_uart_tx : process (clk) is
+    p_transmitter : process (clk) is
     begin
-
         if rising_edge(clk) then
             if (rst = '1') then
-                tx        <= '1';
-                sig_count <= 0;
-                done   <= '0';
-                state_tx  <= idle;
-            elsif (baud_en = '1') then
+                tx    <= '1';
+                done  <= '0';
+                state <= IDLE;
 
-                case state_tx is
+            else
+                case state is
 
-                    when idle =>
-                        tx      <= '1';
+                    when IDLE =>
+                        tx   <= '1';
                         done <= '0';
+
                         if (tx_start = '1') then
-                            state_tx <= start_bit;
+                            periods <= 0;
+                            state   <= START_BIT;
                         end if;
 
-                    when start_bit =>
-                        -- Start bit (LOW), Load data to transmit
-                        tx        <= '0';
-                        sig_reg   <= data_in;
-                        sig_count <= 0;
-                        done   <= '0';
-                        state_tx  <= data;
+                    when START_BIT =>
+                        tx   <= '0';
+                        reg  <= data;
+                        bits <= 0;
 
-                    when data =>
-                        -- Transmit LSB, Shift right
-                        tx      <= sig_reg(0);
-                        sig_reg <= '0' & sig_reg(7 downto 1);
-
-                        if (sig_count = 7) then
-                            state_tx <= stop_bit;
+                        -- Wait for bit period according to baudrate
+                        if (periods = N_PERIODS - 1) then
+                            state   <= DATA_BITS;
+                            periods <= 0;
                         else
-                            sig_count <= sig_count + 1;
+                            periods <= periods + 1;
                         end if;
 
-                    when stop_bit =>
-                        -- Stop bit (HIGH)
-                        tx       <= '1';
-                        done  <= '1';
-                        state_tx <= idle;
+                    when DATA_BITS =>
+                        -- Transmit LSB
+                        tx <= reg(0);
+
+                        -- Wait for bit period according to baudrate
+                        if (periods = N_PERIODS - 1) then
+                            -- Shift data register
+                            reg     <= '0' & reg(7 downto 1);
+                            periods <= 0;
+
+                            -- Send all data bits
+                            if (bits = 7) then
+                                state <= STOP_BIT;
+                            else
+                                bits <= bits + 1;
+                            end if;
+                        else
+                            periods <= periods + 1;
+                        end if;
+
+                    when STOP_BIT =>
+                        tx   <= '1';
+                        done <= '1';
+
+                        -- Wait for bit period according to baudrate
+                        if (periods = N_PERIODS - 1) then
+                            state <= IDLE;
+                        else
+                            periods <= periods + 1;
+                        end if;
 
                     when others =>
-                        state_tx <= idle;
+                        state <= IDLE;
 
                 end case;
-
             end if;
         end if;
-
-    end process p_uart_tx;
+    end process p_transmitter;
 
 end architecture behavioral;
