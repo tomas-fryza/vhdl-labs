@@ -7,6 +7,9 @@
 --! Receiver Transmitter) transmitter using a Finite State
 --! Machine (FSM) in 8N1 mode with variable baudrate.
 --!
+--! See also:
+--!   https://nandland.com/uart-serial-port-module/
+--!
 --! Developed using TerosHDL and Vivado 2020.2.
 --! Tested on Nexys A7-50T board and xc7a50ticsg324-1L FPGA.
 -------------------------------------------------
@@ -25,7 +28,7 @@ entity uart_tx is
     port (
         clk      : in    std_logic;                    --! Main clock
         rst      : in    std_logic;                    --! High-active synchronous reset
-        data     : in    std_logic_vector(7 downto 0); --! Data to transmit
+        tx_data  : in    std_logic_vector(7 downto 0); --! Data to transmit
         tx_start : in    std_logic;                    --! Start transmission
         tx       : out   std_logic;                    --! UART Tx line
         done     : out   std_logic                     --! Transmission completed
@@ -40,7 +43,7 @@ architecture behavioral of uart_tx is
 
     constant N_PERIODS : integer := (CLK_FREQ / BAUDRATE);
 
-    signal bits    : integer range 0 to 7;
+    signal bit_idx : integer range 0 to 7;
     signal periods : integer range 0 to N_PERIODS - 1;
     signal reg     : std_logic_vector(7 downto 0);
 
@@ -67,9 +70,9 @@ begin
                         end if;
 
                     when START_BIT =>
-                        tx   <= '0';
-                        reg  <= data;
-                        bits <= 0;
+                        tx      <= '0';
+                        reg     <= tx_data;
+                        bit_idx <= 0;
 
                         -- Wait for bit period according to baudrate
                         if (periods = N_PERIODS - 1) then
@@ -90,10 +93,10 @@ begin
                             periods <= 0;
 
                             -- Send all data bits
-                            if (bits = 7) then
+                            if (bit_idx = 7) then
                                 state <= STOP_BIT;
                             else
-                                bits <= bits + 1;
+                                bit_idx <= bit_idx + 1;
                             end if;
                         else
                             periods <= periods + 1;

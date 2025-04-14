@@ -105,7 +105,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
       | :-: | :-: | :-- | :-- |
       | `clk`      | input  | `std_logic` | Main clock |
       | `rst`      | input  | `std_logic` | High-active synchronous reset |
-      | `data`  | input  | `std_logic_vector(7 downto 0)` | Data to transmit |
+      | `tx_data`  | input  | `std_logic_vector(7 downto 0)` | Data to transmit |
       | `tx_start` | input  | `std_logic` | Start transmission |
       | `tx` | output | `std_logic` | UART Tx line |
       | `done` | output | `std_logic` | Transmission completed |
@@ -130,7 +130,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
         constant N_PERIODS : integer := (CLK_FREQ / BAUDRATE);
 
-        signal bits    : integer range 0 to 7;
+        signal bit_idx : integer range 0 to 7;
         signal periods : integer range 0 to N_PERIODS - 1;
         signal reg     : std_logic_vector(7 downto 0);
 
@@ -185,10 +185,10 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                                 periods <= 0;
 
                                 -- Send all data bits
-                                if (bits = 7) then
+                                if (bit_idx = 7) then
                                     state <= STOP_BIT;
                                 else
-                                    bits <= bits + 1;
+                                    bit_idx <= bit_idx + 1;
                                 end if;
                             else
                                 periods <= periods + 1;
